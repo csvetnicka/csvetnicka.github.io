@@ -1,0 +1,100 @@
+<!doctype html>
+
+<html lang="en">
+<head>
+<meta charset="utf-8">
+
+<title>MYSCHEDULE+</title>
+
+<meta name="description" content="home page for MYSCHEDULE+">
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link href="index.css" rel="stylesheet" type="text/css">
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<script src="index.js"> </script>
+</head>
+
+<body>
+
+<div class="container-fluid">
+
+	<div class="parallax">
+		</div>
+<nav class="navbar navbar-default">
+	
+	
+	<div class="navbar-header">
+		<a class="navbar-brand"style="color: blue; font-family: serif" href="#">MYSCHEDULE+ </a>
+	</div>
+	<ul class="nav navbar-nav">
+		<li class="active" style="color:black"> <a href=""> Home </a> </li>
+		<li> <a href="hello" style="color:black"> Course Search </a> </li>
+		<li> <a href="djdd" style="color:black"> Schedule Generator </a> </li>
+	</ul>
+</div>
+</nav>
+
+
+<div class="well"> 
+<form class="form" id="here"> 
+<div class="dropdown">
+<button class="btn btn-default dropdown-toggle" style="width: 75px"type="button" id="dropdownMenu1" data-toggle="dropdown">
+	<b> Term: </b>  </button>
+<ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
+ <li>Fall 2016 </li>
+  <li>Winter 2017</li>
+  <li> Spring 2017</li>
+  </ul>
+</div>
+<div class="row">  
+<div class="col-md-4">
+<div class="form-group">
+<label for="school"> School</label>
+	<input type="text" id="n" class="form-control" >
+</div>
+<div class="form-group">
+<label for="keyword"> Keyword</label>
+	<input type="text" id="n" class="form-control" >
+</div>
+</div>
+<div class="col-md-4">
+<div class="form-group">
+<label for="department"> Department </label>
+	<input type="text" class="form-control" >
+</div>
+<div class="form-group">
+<label for="credithours"> Credit Hours</label>
+	<input type="text" id="n" class="form-control" >
+</div>
+</div>
+<div class="col-md-3">
+<div class="form-group">
+<label for="coursenum"> Course Number </label>
+<input type="text" class="form-control">
+</div>
+<div class="form-group">
+<label for="prof"> Professor</label>
+	<input type="text" id="n" class="form-control" >
+</div>
+</div>
+</div>
+<button class="btn btn-primary"> Search </button>
+
+
+</form>
+</div>
+<div id="results"> </div>
+</div>
+
+
+
+</body>
+
+
+
+</html>
