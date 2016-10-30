@@ -1,0 +1,20 @@
+form {
+	width: 25%;
+}
+
+heading {
+width: 600px;	
+}
+
+h2 {
+margin-top: 0px;	
+}
+
+button {
+	margin-top: 10px;	
+}
+
+h2 > name {
+font-size: 14 pt;
+
+}
