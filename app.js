@@ -68,6 +68,13 @@ app.post("/createaccount",function(req,res){
 		console.log(req.body.firstName);
 		console.log(req.body.password);
 		console.log(req.body.email);
+		res.writeHeader
+});
+
+
+app.post("/createsuggestions",function(req,res){
+	console.log("Post request received");
+	console.log(req.body.course0);
 });
 
 
