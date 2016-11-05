@@ -9,7 +9,7 @@ var http = require("http");
 
 var app = express();
 
-var courses = {"EECS": ["183", 
+var courses = {"EECS": ["183",   //List of courses in EECS department?
 "203","270","285","382", "280", "281", "370", "373","376",
 "381", "388", "441", "427", "442", "445",
 "467", "470", "481","482","483", "484", "485",
@@ -20,11 +20,11 @@ var courses = {"EECS": ["183",
 
 courses["EECS"].sort();
 app.use(morgan("short"));
-var publicPath = path.join(__dirname,"Public");
+var publicPath = path.join(__dirname,"Public"); //Joins current working directory with Public
 
-app.use(express.static(publicPath));
+app.use(express.static(publicPath)); //Every file available in the Public folder can be requested
 
-   
+//Autocomplete function, seems to work I think we should use the html alternative   
 
 app.get("/autocomplete",function(req,res){
 	console.log("In autocomplete");
@@ -66,7 +66,7 @@ app.get("/autocomplete",function(req,res){
 
 
 
-
+//Creates sever to listen on port 3000
 http.createServer(app).listen(3000,function(){
 	console.log("App listenening on port 3000");
 });
