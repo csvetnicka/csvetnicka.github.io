@@ -2,13 +2,14 @@ var express = require("express");
 var morgan = require("morgan");
 var path = require("path");
 var url = require("url");
-
+var bodyParser = require('body-parser');
 
 var fs = require("fs");
 var http = require("http");
 
 var app = express();
-
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true })); 
 var courses = {"EECS": ["183",   //List of courses in EECS department?
 "203","270","285","382", "280", "281", "370", "373","376",
 "381", "388", "441", "427", "442", "445",
@@ -62,7 +63,12 @@ app.get("/autocomplete",function(req,res){
 
 });
 
-
+app.post("/createaccount",function(req,res){
+		console.log(req.body.lastName);
+		console.log(req.body.firstName);
+		console.log(req.body.password);
+		console.log(req.body.email);
+});
 
 
 
