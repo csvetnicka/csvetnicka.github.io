@@ -10,6 +10,10 @@ var http = require("http");
 var app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true })); 
+app.set("views",path.resolve(__dirname,"views"));
+app.set("view engine", "ejs");
+
+
 var courses = {"EECS": ["183",   //List of courses in EECS department?
 "203","270","285","382", "280", "281", "370", "373","376",
 "381", "388", "441", "427", "442", "445",
@@ -183,8 +187,23 @@ app.post("/createsuggestions",function(req,res){
 		}
 	}
 	console.log(recommendations);
+	res.writeHead(200, {"Content-Type": "application/json"});
+var json = JSON.stringify({courseReqs: recommendations});
+
+	res.end(json);
+  });
+	
+
+
+
+/*
+app.get("/recommendations",function(req,res){
+	console.log("Redirected");
+	return res.render("recommendations");
 
 });
+
+*/
 
 
 

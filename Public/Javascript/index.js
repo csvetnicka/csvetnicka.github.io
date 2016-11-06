@@ -35,8 +35,20 @@ var firstPadding = true
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',
     async: true, data: JSON.stringify(coursesTaken),
-			success: function(){
-				console.log("success")  //
+			success: function(data,status, xhr){
+				console.log("success");  //
+				reqs = data.courseReqs;
+				$("#rec-list").append("<h4 class='text-center'> Your Course Recommendations </h4>");
+				for(var i = 0; i < reqs.length; i++){
+					newId = "req" + i.toString();
+					newButtonId = "info" + i.toString();
+					$("#rec-list").append("<p id='" + newId + "'>" + reqs[i] + "</p>");
+					$("#rec-list").append("<button type='button' id='" + newButtonId + "' class='btn btn-info'>Info</button>");
+					
+				
+				}
+			
 			}});
+		return false;
 	});
 });
