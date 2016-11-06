@@ -124,7 +124,6 @@ app.post("/createsuggestions",function(req,res){
 		Taken.push(req.body[takenKeys[i]].toUpperCase());
 	}
 	
-	console.log("COURSES TAKEN: " + Taken);
 	//Compare taken courses to prereqs and return recommendations
 	var recommendations =[]
 	var key = Object.keys(course_Prereqs);
@@ -135,8 +134,6 @@ app.post("/createsuggestions",function(req,res){
 		var j = 1;
 
 		if (Taken.indexOf(key[i]) == -1) { //User has not taken this course already
-			console.log(key[i]);
-			console.log(check);
 			//All Required
 			var canTake = true;
 			while((j < check.length) && (check[j] != '|')) {
@@ -149,11 +146,9 @@ app.post("/createsuggestions",function(req,res){
 			if (canTake == false) {
 				continue; //User has not taken all required courses
 			}
-			console.log("Passed canTake");
 
 			//One of
 			j++;
-			console.log(j);
 			var oneOf = false;
 			if (((j < check.length) && (check[j] == '|')) || (j >= check.length)) {
 				oneOf = true;
@@ -168,16 +163,12 @@ app.post("/createsuggestions",function(req,res){
 			if (oneOf == false) {
 				continue; //User has not taken at least one of required "OR" courses
 			}
-			console.log("Passed One of");
 
 			//No Credit will be given
 			j++;
-			console.log(j);
-			console.log(check.length);
 			var noCredit = false;
 			while(j < check.length) {
 				if (Taken.indexOf(check[j]) != -1) {
-					console.log(check[j]);
 					noCredit = true;
 					break; //No need to check further
 				}
@@ -186,7 +177,6 @@ app.post("/createsuggestions",function(req,res){
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
 			}
-			console.log("Passed No credit");
 
 			//Add This course to reccomendations for user
 			recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
