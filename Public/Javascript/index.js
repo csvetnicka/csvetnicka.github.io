@@ -28,6 +28,8 @@ var firstPadding = true
 		for(var i = 0; i < numAdded; i++){
 			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
 		}
+		coursesTaken["numCourses"] = numAdded;
+
 		console.log(coursesTaken);
 		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions", 
     contentType: 'application/json; charset=utf-8',
