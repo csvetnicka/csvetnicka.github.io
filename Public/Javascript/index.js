@@ -10,13 +10,13 @@ var firstPadding = true
 			if(firstPadding){
 
 
-				$("#add-class-form").append('<div class="form-group top-input input-sm" ><input type="text" class="form-control"' + 
+				$("#add-class-form").append('<div class="form-group top-input input-sm" ><input list="classes" type="text" class="form-control"' + 
 					courseAddition + '</div>');
 				firstPadding = false
 				numAdded += 1;
 			}
 			else{
-				$("#add-class-form").append('<div class="form-group top-input input-sm" ><input type="text" class="form-control"' + courseAddition+
+				$("#add-class-form").append('<div class="form-group top-input input-sm" ><input list="classes" type="text" class="form-control"' + courseAddition+
 					'</div>');
 				numAdded += 1;
 			}
