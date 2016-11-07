@@ -81,7 +81,7 @@ var firstPadding = true
 			console.log(id);
 			$.ajax({type:"GET", url: "http://localhost:3000/courseinformation?term=2120&course=" +course, async: true,
 			success: function(data,status, xhr){
-					$("#" + "div" + id).append("<div class='well img-rounded' style='padding:-100px;'><p>" + data.description + "</p> </div>");
+					$("#" + "div" + id).append("<div class='well img-rounded' style='padding:-100px;'><p>" + data.description + "<h4> <a href='http://www.lsa.umich.edu/cg/cg_detail.aspx?content=2110EECS" + course.substring(4,7) + "001&termArray=f_16_2110'> Course Schedule </a> </h4>" + "</p> </div>");
 				}
 			
 			});
