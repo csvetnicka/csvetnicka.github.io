@@ -6,6 +6,8 @@ var bodyParser = require('body-parser');
 
 var fs = require("fs");
 var http = require("http");
+var request = require("request");
+var https = require("https");
 
 var app = express();
 app.use(bodyParser.json());
@@ -23,7 +25,9 @@ var courses = {"EECS": ["183",   //List of courses in EECS department?
 "490", "493","497"],
 "ENGR": ["101"] };
 courses["EECS"].sort();
-
+//Terms 2110 2120
+//School ENG LSA
+//Departments: EECS, ENGR
 //Course Prerequisite Dictionary
 //course_Prereqs['course name'][0] will always be the course's title
 //"|" allows for differentiation: [(Course Name), All Required,..., | , One Of,..., |, No Credit,...]
@@ -65,12 +69,40 @@ var course_Prereqs = { "ENGR 101" : ["Intro Comp&Prog", "|", "|", "ENGR 151", "E
 					   "EECS 494" : ["Computer Game Design and Development", "EECS 281"]
 					   };
 
+var descriptions = {"EECS183" : "Elementary Programming Concepts --- Fundamental concepts and skills of programming in a high level language.  Flow of control:  selection, iteration, subprograms.  Data structures:  strings, arrays, records, lists, tables.  Algorithms using selection and iteration (decision making, finding maxima/minima, searching, sorting, simulation, etc.).  Good program design, structure, and style are emphasized.  Testing and debugging. Not intended for Engineering students (who should take ENGR 101), nor for CS majors in LSA who qualify for EECS 280.",
+					"ENGR101": "Introduction to Computers and Programming\n\nAlgorithms and programming in C++ and Matlab, computing as a tool in engineering, introduction to the organization of digital computers.",
+					"EECS203": "Discrete Math --- Introduction to the mathematical foundations of computer science.  Topics covered include:  prepositional and predicate logic, set theory, function and relations, growth of functions and asymptotic notation, introduction to algorithms, elementary combinatorics, and graph theory, and discrete probability theory.",
+					"EECS270": "Introduction to Logic Design --- Binary and non-binary systems, Boolean algebra digital design techniques, logic gates, logic minimization, standard combinational circuits, sequential circuits, flip-flops, synthesis of synchronous sequential circuits, PLA's, ROM's, RAM's, arithmetic circuits, computer-aided design.  Laboratory includes hardware design and CAD experiments.",
+					"EECS280": "Programming and Introductory Data Structures --- Techniques and algorithm development and effective programming, top-down analysis, structured programming, testing, and program correctness.  Program language syntax and static and runtime semantics.  Scope, procedure instantiation, recursion, abstract data types, and parameter passing methods.  Structured data types, pointers, linked data structures, stacks, queues, arrays, records, and trees.",
+					"EECS281": "Data Structures and Algorithms --- Introduction to the algorithm analysis and O-notation; Fundamental data structures including lists, stacks, queues, priority queues, hash tables, binary trees, search trees, balanced, trees, and graphs; searching and sorting algorithms; recursive algorithms; basic graph algorithms; introduction to greedy algorithms and divide and conquer strategy.  Several programming assignments.",
+					"EECS370": "Basic concepts of computer organization and hardware. Instructions executed by a processor and how to use these instructions in simple assembly-language programs. Stored-program concept. Data-path and control for multiple implementations of a processor. Performance evaluation, pipelining, caches, virtual memory, input/output.",
+					"EECS373": "Principles of hardware and software microcomputer interfacing; digital logic design and implementation. Experiments with specially designed laboratory facilities. Introduction to digital development equipment and logic analyzers. Assembly language programming. Lecture and laboratory.",
+					"EECS376": "An introduction to computation theory: finite automata, regular languages, pushdown automata, context-free languages, Turing machines, recursive languages and functions, and computational complexity.",
+					"EECS388": "This course introduces the principles and practices of computer security as applied to software, host systems, and networks. It covers the foundations of building, using, and managing secure systems. Topics include standard cryptographic functions and protocols, threats and defenses for real-world systems, incident responses, and computer forensics. There will be homework exercises, programming projects, and a final exam",
+					"EECS441": "The use of mobile technologies is fast becoming integral to lives of individuals and groups across the planet. In this course, working in teams, students will propose, design, develop, test, and market software for mobile devices. Not only will best practices for mobile software development be learned, but best practices for entrepreneurs will also be learned. As well, students will put their creations up for sale/distribution by uploading their apps to the appropriate market place.",
+					"EECS442": "Computational methods for the recovery, representation, and application of visual information. Topics from image formation, binary images, digital geometry, similarity and dissimilarity detection, matching, curve and surface fitting, constraint propagation relaxation labeling, stereo, shading texture, object representation and recognition, dynamic scene analysis, and knowledge based techniques. Hardware, software techniques",
+					"EECS445": "Theory and implementation of state of the art machine learning algorithms for large-scale real-world applications. Topics include supervised learning (regression, classification, kernal methods, neural networks, and regularization) and unsupervised learning, (clustering, density estimation, and dimensionality and reduction).",
+					"EECS467":"A theoretical and hands-on introduction to robotics from a computer science perspective. Topics: kinematics, inverse kinematics, sensors, sensor processing, motion planning, control, Kalman filters, dynamics, embedded systems, real time operating systems, state estimation and mapping, and artificial intelligence methods. Emphasizes laboratory design and programming of robotic systems.",
+					"EECS470":"Basic concepts of computer architecture and organization. Computer evolution. Design methodology. Performance evaluation. Elementary queueing models. CPU architecture. Introduction sets. ALU design. Hardware and microprogrammed control. Nanoprogramming. Memory hierarchies. Virtual memory. Cache design. Input-output architectures. Interrupts and DMA. I/O processors. Parallel processing. Pipelined processors. Multiprocessors",
+					"EECS481": "Advanced concepts and methods for the creation of software systems, dealing with structuring principles, design methodologies, and informal analysis. Emphasis is on process steps that are necessary in the development of large, complex software systems. Material emphasizes systems-level thinking (and builds upon EECS 481 Software Engineering currently offered)",
+					"EECS482": "Operating system design and implementation: multi-tasking; concurrency and synchronization; inter-process communication; deadlock; scheduling; resource allocation; memory and storage management; input-output; file systems; protection and security. Students write several substantial programs dealing with concurrency and synchronization in a multi-task environment, with file systems, and with memory management",
+					"EECS483": "Introduction to compiling techniques including parsing algorithms, semantic processing and optimization. Students implement a compiler for a substantial programming language using a compiler generating system.",
+					"EECS484": "Concepts and methods for the design, creation, query and management of large enterprise databases. Functions and characteristics of the leading database management systems. Query languages such as SQL, forms, embedded SQL, and application development tools. Database design, integrity, normalization, access methods, query optimization, transaction management and concurrency control and recovery.",
+					"EECS485": "Design and use of databases in the Web context; data models, database design, replication issues, client/server systems, information retrieval, web server design; substantial project involving the development of a databasebacked web site.",
+					"EECS486": "Covers background and recent advances in information retrieval (IR): indexing, processing, querying, classifying data. Basic retrieval models, algorithms, and IR system implementations. Focuses on textual data, but also looks at images/videos, music/audio, and geospatial information. Web search, including Web crawling, link analysis, search engine development, social media, and crowdsourcing",
+					"EECS489": "Protocols and architectures of computer networks. Topics include client-server computing, socket programming, naming and addressing, media access protocols, routing and transport protocols, flow and congestion control, and other application-specific protocols. Emphasis is placed on understanding protocol design principles. Programming problems to explore design choices and actual implementation issues assigned",
+					"EECS492": "Fundamental concepts of AI, organized around the task of building computational agents. Core topics include search, logic, representation and reasoning, automated planning, decision making under uncertainty, and machine learning.",
+					"EECS494": "Concepts and methods for the design and development of computer games. Topics include: history of games, 2D graphics and animation, sprites, 3D animation, binary space partition trees, software engineering, game design, interactive fiction, user interfaces, artificial intelligence, game SDK’s, networking, multi-player games, game development environments, commercialization of software."
+				};
+
+
 app.use(morgan("short"));
 var publicPath = path.join(__dirname,"Public"); //Joins current working directory with Public
 
 app.use(express.static(publicPath)); //Every file available in the Public folder can be requested
 
 //Autocomplete function, seems to work I think we should use the html alternative   
+var token = "";
 
 app.get("/autocomplete",function(req,res){
 	console.log("In autocomplete");
@@ -192,7 +224,17 @@ var json = JSON.stringify({courseReqs: recommendations});
 
 	res.end(json);
   });
-	
+
+
+app.get("/courseinformation",function(req,res){
+	console.log("Course Information");
+	console.log(req.query.course);
+	console.log(req.query.course);
+	var json = JSON.stringify({description: descriptions[req.query.course]});
+	res.writeHead(200,{"Content-Type": "application/json"});
+	res.end(json);
+
+});
 
 
 
