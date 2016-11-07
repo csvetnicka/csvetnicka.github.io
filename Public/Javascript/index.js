@@ -52,15 +52,15 @@ var firstPadding = true
 			success: function(data,status, xhr){
 				console.log("success");  //
 				reqs = data.courseReqs;
-				$("#rec-list").append("<h2 class='text-center'> Your Course Recommendations </h2>");
+				$("#rec-list").append("<h2 class='text-center'> Your Computer Science Course Recommendations </h2>");
 				for(var i = 0; i < reqs.length; i++){
 					newId = "req" + i.toString();
 					newButtonId = "info" + i.toString();
 					var coursename = reqs[i].substring(0,4) + "-" + reqs[i].substring(5,8);
 					//console.log(coursename);
 					$("#rec-list").append("<div>");
-					$("#rec-list").append("<p id='" + newId + "'>" + reqs[i] + "</p> <div id='div" + coursename + "'>");
-					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button>");
+					$("#rec-list").append("<li class='list-inline' ><p id='" + newId + "'>" + reqs[i] + "</p> <div id='div" + coursename + "'>");
+					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button> </li>");
 					$("#rec-list").append("</div> </div>");
 					courseInformation[coursename] = false;
 
@@ -81,7 +81,7 @@ var firstPadding = true
 			console.log(id);
 			$.ajax({type:"GET", url: "http://localhost:3000/courseinformation?term=2120&course=" +course, async: true,
 			success: function(data,status, xhr){
-					$("#" + "div" + id).append("<div class='well'><p>" + data.description + "</p> </div>");
+					$("#" + "div" + id).append("<div class='well img-rounded' style='padding:-100px;'><p>" + data.description + "</p> </div>");
 				}
 			
 			});
