@@ -213,9 +213,14 @@ app.post("/createsuggestions",function(req,res){
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
 			}
-
-			//Add This course to reccomendations for user
-			recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
+			
+			if (((Taken.indexOf("EECS 280") != -1) || (Taken.indexOf("EECS 281") != -1))
+				 && ((key[i] == "EECS 183") || (key[i] == "ENGR 101"))) {
+				//Don't add
+			} else {
+				//Add This course to reccomendations for user
+				recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
+			}
 		}
 	}
 	console.log(recommendations);
