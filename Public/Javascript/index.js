@@ -1,5 +1,4 @@
 
-
 $(document).ready(function(){
 var once = false; //Have course recommendations already been given
 var numAdded = 0;
@@ -36,7 +35,7 @@ var firstPadding = true
 		$("#major").html(event.target.text); //Cange Major dropdown to selected element
 	});
 
-
+	var courseInformation = {};
 	$("#course-submit").click(function(){
 		if(!once){
 		var coursesTaken = {}
@@ -60,9 +59,10 @@ var firstPadding = true
 					var coursename = reqs[i].substring(0,4) + "-" + reqs[i].substring(5,8);
 					//console.log(coursename);
 					$("#rec-list").append("<div>");
-					$("#rec-list").append("<p id='" + newId + "'>" + reqs[i] + "</p>");
-					$("#rec-list").append("<button class='course-info' type='button' id='" + coursename + "' class='btn btn-info'>Info</button>");
-					$("#rec-list").append("</div>");
+					$("#rec-list").append("<p id='" + newId + "'>" + reqs[i] + "</p> <div id='div" + coursename + "'>");
+					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button>");
+					$("#rec-list").append("</div> </div>");
+					courseInformation[coursename] = false;
 
 				
 				}
@@ -73,16 +73,22 @@ var firstPadding = true
 	});
 
 
-	$("#help").on("click","button.course-info",function(){
+	$(".help").on("click","button.course-info",function(){
+		console.log("id");
+		if(!courseInformation[event.target.id]){
 		var course = event.target.id.substring(0,4) + event.target.id.substring(5,8);
 			var id = event.target.id;
 			console.log(id);
 			$.ajax({type:"GET", url: "http://localhost:3000/courseinformation?term=2120&course=" +course, async: true,
 			success: function(data,status, xhr){
-					$("#" + id).append("<div class='well'><p>" + data.description + "</p> </div>");
+					$("#" + "div" + id).append("<div class='well'><p>" + data.description + "</p> </div>");
 				}
 			
 			});
+
+		}
+
+		courseInformation[event.target.id] = true;
 		
 	});
 });
