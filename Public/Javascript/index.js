@@ -1,6 +1,7 @@
 
 
 $(document).ready(function(){
+var once = false; //Have course recommendations already been given
 var numAdded = 0;
 var course = "course";
 var firstPadding = true
@@ -10,7 +11,7 @@ var firstPadding = true
 			if(firstPadding){
 
 
-				$("#add-class-form").append('<div class="form-group top-input input-sm" ><input list="classes" type="text" class="form-control"' + 
+				$("#add-class-form").append('<div class="form-group top-input input-sm" style="padding-top: 15px; padding-bottom: 30px;" ><input list="classes" type="text" class="form-control"' + 
 					courseAddition + '</div>');
 				firstPadding = false
 				numAdded += 1;
@@ -22,8 +23,22 @@ var firstPadding = true
 			}
 
 	});
+	$(".t").click(function(){
+		console.log(event.target.text);  //Change term dropdown to selected element
+		$("#term").html(event.target.text);
+
+	});
+
+	$(".s").click(function(){
+		$("#school").html(event.target.text); //Change school dropdown to selected element
+	});
+	$(".m").click(function(){
+		$("#major").html(event.target.text); //Cange Major dropdown to selected element
+	});
+
 
 	$("#course-submit").click(function(){
+		if(!once){
 		var coursesTaken = {}
 		for(var i = 0; i < numAdded; i++){
 			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
@@ -38,7 +53,7 @@ var firstPadding = true
 			success: function(data,status, xhr){
 				console.log("success");  //
 				reqs = data.courseReqs;
-				$("#rec-list").append("<h4 class='text-center'> Your Course Recommendations </h4>");
+				$("#rec-list").append("<h2 class='text-center'> Your Course Recommendations </h2>");
 				for(var i = 0; i < reqs.length; i++){
 					newId = "req" + i.toString();
 					newButtonId = "info" + i.toString();
@@ -51,8 +66,9 @@ var firstPadding = true
 
 				
 				}
-			
+			once = true;
 			}});
+	}
 		return false;
 	});
 
