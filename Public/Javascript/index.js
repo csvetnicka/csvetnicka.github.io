@@ -58,9 +58,9 @@ var firstPadding = true
 					newButtonId = "info" + i.toString();
 					var coursename = reqs[i].substring(0,4) + "-" + reqs[i].substring(5,8);
 					//console.log(coursename);
-					$("#rec-list").append("<div>");
-					$("#rec-list").append("<li class='list-inline' ><p id='" + newId + "'>" + reqs[i] + "</p> <div id='div" + coursename + "'>");
-					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button> </li>");
+					$("#rec-list").append("<div class='row'> ");
+					$("#rec-list").append("<h5 id='" + newId + "'>" + reqs[i] + "</h5> <div id='div" + coursename + "'>");
+					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button> ");
 					$("#rec-list").append("</div> </div>");
 					courseInformation[coursename] = false;
 
