@@ -25,6 +25,7 @@ var courses = {"EECS": ["183",   //List of courses in EECS department?
 "490", "493","497"],
 "ENGR": ["101"] };
 courses["EECS"].sort();
+
 //Terms 2110 2120
 //School ENG LSA
 //Departments: EECS, ENGR
@@ -162,10 +163,19 @@ app.post("/createsuggestions",function(req,res){
 
 	//Store Courses user has taken (For comparison)
 	var takenKeys = Object.keys(req.body);
+	var ULCS = false;
+	var took_281 = false;
 	Taken = []
 
 	for (var i = 0; i < req.body.numCourses; i++) {
-		Taken.push(req.body[takenKeys[i]].toUpperCase());
+		var took_course = req.body[takenKeys[i]].toUpperCase();
+		Taken.push(took_course);
+		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) >= "280")) {
+			ULCS = true;
+		}
+		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) > "281")) {
+			took_281 = true;
+		}
 	}
 	
 	//Compare taken courses to prereqs and return recommendations
@@ -181,7 +191,7 @@ app.post("/createsuggestions",function(req,res){
 			//All Required
 			var canTake = true;
 			while((j < check.length) && (check[j] != '|')) {
-				if (Taken.indexOf(check[j]) == -1) {
+				if ((Taken.indexOf(check[j]) == -1) && !took_281) {
 					canTake = false;
 					break; //No need to check further
 				}
@@ -222,18 +232,15 @@ app.post("/createsuggestions",function(req,res){
 				continue; //User will not be given credit for this course
 			}
 			
-			if (((Taken.indexOf("EECS 280") != -1) || (Taken.indexOf("EECS 281") != -1))
-				 && ((key[i] == "EECS 183") || (key[i] == "ENGR 101"))) {
-				//Don't add
-			} else {
-				//Add This course to reccomendations for user
-				recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
+			if(ULCS && (key[i].substring(5) < "270")) {
+				continue;
 			}
+			recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
 		}
 	}
 	console.log(recommendations);
 	res.writeHead(200, {"Content-Type": "application/json"});
-var json = JSON.stringify({courseReqs: recommendations});
+	var json = JSON.stringify({courseReqs: recommendations});
 
 	res.end(json);
   });
