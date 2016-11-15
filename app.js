@@ -173,7 +173,7 @@ app.post("/createsuggestions",function(req,res){
 		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) >= "280")) {
 			ULCS = true;
 		}
-		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) > "281")) {
+		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) >= "281")) {
 			took_281 = true;
 		}
 	}
@@ -232,7 +232,7 @@ app.post("/createsuggestions",function(req,res){
 				continue; //User will not be given credit for this course
 			}
 			
-			if(ULCS && (key[i].substring(5) < "270")) {
+			if(ULCS && ((key[i].substring(5) < "270") || (key[i] == "EECS 280"))) {
 				continue;
 			}
 			recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
