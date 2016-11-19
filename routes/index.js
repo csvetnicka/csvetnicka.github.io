@@ -202,6 +202,25 @@ router.get("/courseinformation",function(req,res){
 
 });
 
+router.get("/login",function(req,res){
+	res.render("login");
+});
+
+router.post("/logininformation",function(req,res){
+		console.log(req.body.email);
+		console.log(req.body.password);
+		var result = db.collection('users').find({_id: "ksandera@umich.edu"});
+  
+  if(result){
+  	console.log("Found user");
+  }
+  else{
+  	console.log("Did not find the user");
+  }
+  // send HTML file populated with quotes here
+
+});
+
 
 router.post("/createaccount",function(req,res){
 	var firstname = req.body.firstname;
