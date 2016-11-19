@@ -3,7 +3,7 @@ var router = express.Router();
 
 router.get("/",function(req,res,next){
 console.log("Here");
- db.collection("users").save({"name": "ksandera", "password": "newpassword"});
+
 	res.render("index");
 });
 
@@ -184,7 +184,9 @@ router.post("/createsuggestions",function(req,res){
 
 
 
-
+router.get("/create",function(req,res,next){
+	res.render("create");
+});
 
 //Autocomplete function, seems to work I think we should use the html alternative   
 
@@ -200,4 +202,15 @@ router.get("/courseinformation",function(req,res){
 
 });
 
+
+router.post("/createaccount",function(req,res){
+	var firstname = req.body.firstname;
+	var lastname = req.body.lastname;
+	var password = req.body.password;
+	var email = req.body.email;
+	console.log("Dis " + email);
+	db.collection("users").save({"firstname": firstname, "lastname": lastname, "password": password,"_id": email});
+	res.end();
+
+});
 module.exports = router;

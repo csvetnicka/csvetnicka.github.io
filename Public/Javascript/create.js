@@ -8,6 +8,7 @@ $(document).ready(function(){
 
 
 	$("#account-submit").click(function(){
+		console.log("submitted");
 		var firstName = $("#user-firstname").val(); //First name from form 
 		
 		var lastName = $("#user-lastname").val(); //Last name from form
@@ -16,8 +17,8 @@ $(document).ready(function(){
 		$.ajax({type:"POST", url: "http://localhost:3000/createaccount", 
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',
-    async: true, data: JSON.stringify({"firstName":
-			firstName, "lastName": lastName, "email": email, "password": password}),
+    async: true, data: JSON.stringify({"firstname":
+			firstName, "lastname": lastName, "email": email, "password": password}),
 			success: function(){
 				console.log("success")  //
 			}});
