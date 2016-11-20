@@ -1,6 +1,39 @@
 <% include header %>
+<div class="container-fluid">
+<div class="row">
+<div class="col-md-4">
+</div>
+<div class="col-md-4">
+<form class="pure-form pure-form-stacked">
+    <fieldset>
+        <legend>Course Guide</legend>
 
-<h1> Course Guide </h1>
+        <label for="term">Term</label>
+        <select id="term-input">
+        	<option> Fall 2016 </option>
+        	<option> Winter 2017 </option>
+        </select>
+
+        <label for="school">School</label>
+        <select id="school-input">
+        	<option> College of Engineering </option>
+        </select>
+
+        <label for="department">Department</label>
+        <select id="department-input">
+            <option>EECS</option>
+           
+        </select>
+        <label for="course"> Course </label>
+        <input id="course-input" type="text" placeholder="EECS 281" />
+
+
+        <button type="submit" class="pure-button pure-button-primary" id="courseguide-submit">Search</button>
+    </fieldset>
+</form>
+</div>
+</div>
+</div>
 
 
 <% include footer %>

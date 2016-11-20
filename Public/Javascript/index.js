@@ -32,7 +32,7 @@ var firstPadding = true
 		$("#school").html(event.target.text); //Change school dropdown to selected element
 	});
 	$(".m").click(function(){
-		$("#major").html(event.target.text); //Cange Major dropdown to selected element
+		$("#major").html(event.target.text); //Change Major dropdown to selected element
 	});
 
 	var courseInformation = {};
@@ -52,14 +52,16 @@ var firstPadding = true
 			success: function(data,status, xhr){
 				console.log("success");  //
 				reqs = data.courseReqs;
+				console.log(reqs);
 				$("#rec-list").append("<h2 class='text-center'> Your Computer Science Course Recommendations </h2>");
 				for(var i = 0; i < reqs.length; i++){
 					newId = "req" + i.toString();
 					newButtonId = "info" + i.toString();
-					var coursename = reqs[i].substring(0,4) + "-" + reqs[i].substring(5,8);
+					//console.log(reqs[i]["course"]);
+					var coursename = reqs[i]["course"].substring(0,4) + "-" + reqs[i]["course"].substring(5,8);
 					//console.log(coursename);
 					$("#rec-list").append("<div class='row'> ");
-					$("#rec-list").append("<h5 id='" + newId + "'>" + reqs[i] + "</h5> <div id='div" + coursename + "'>");
+					$("#rec-list").append("<h5 id='" + newId + "'>" + reqs[i]["course"] +  " Difficulty: " + reqs[i]["difficulty"].toString() + "</h5> <div id='div" + coursename + "'>");
 					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button> ");
 					$("#rec-list").append("</div> </div>");
 					courseInformation[coursename] = false;

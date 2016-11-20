@@ -23,6 +23,7 @@ courses["EECS"].sort();
 //Course Prerequisite Dictionary
 //course_Prereqs['course name'][0] will always be the course's title
 //"|" allows for differentiation: [(Course Name), All Required,..., | , One Of,..., |, No Credit,...]
+/*
 var course_Prereqs = { "ENGR 101" : ["Intro Comp&Prog", "|", "|", "ENGR 151", "EECS 183"],
 					   "EECS 183" : ["Elementary Programming Concepts", "|", "|", "ENGR 101", "ENGR 151"], 
 					   "EECS 203" : ["Discrete Mathematics", "|", "MATH 115", "MATH 116", "MATH 119", "MATH 120", "MATH 121", "MATH 156", "MATH 175",
@@ -60,7 +61,7 @@ var course_Prereqs = { "ENGR 101" : ["Intro Comp&Prog", "|", "|", "ENGR 151", "E
 					   "EECS 493" : ["User Interface Development", "EECS 281"],
 					   "EECS 494" : ["Computer Game Design and Development", "EECS 281"]
 					   };
-
+*/
 var descriptions = {"EECS183" : "Elementary Programming Concepts --- Fundamental concepts and skills of programming in a high level language.  Flow of control:  selection, iteration, subprograms.  Data structures:  strings, arrays, records, lists, tables.  Algorithms using selection and iteration (decision making, finding maxima/minima, searching, sorting, simulation, etc.).  Good program design, structure, and style are emphasized.  Testing and debugging. Not intended for Engineering students (who should take ENGR 101), nor for CS majors in LSA who qualify for EECS 280.",
 					"ENGR101": "Introduction to Computers and Programming\n\nAlgorithms and programming in C++ and Matlab, computing as a tool in engineering, introduction to the organization of digital computers.",
 					"EECS203": "Discrete Math --- Introduction to the mathematical foundations of computer science.  Topics covered include:  prepositional and predicate logic, set theory, function and relations, growth of functions and asymptotic notation, introduction to algorithms, elementary combinatorics, and graph theory, and discrete probability theory.",
@@ -116,15 +117,18 @@ router.post("/createsuggestions",function(req,res){
 	}
 	
 	//Compare taken courses to prereqs and return recommendations
+	db.collection("courses").find().toArray(function(err,result){
+	
+
 	var recommendations =[]
-	var key = Object.keys(course_Prereqs);
-	var size = key.length;
+	var key = result;
+	var size = result.length;
 	
 	for (var i = 0; i < size; i++) {
-		var check = course_Prereqs[key[i]];
+		var check = key[i]["prerequisites"];
 		var j = 1;
 
-		if (Taken.indexOf(key[i]) == -1) { //User has not taken this course already
+		if (Taken.indexOf(key[i]["department"] + " " +  key[i]["coursenumber"]) == -1) { //User has not taken this course already
 			//All Required
 			var canTake = true;
 			while((j < check.length) && (check[j] != '|')) {
@@ -169,17 +173,34 @@ router.post("/createsuggestions",function(req,res){
 				continue; //User will not be given credit for this course
 			}
 			
-			if(ULCS && ((key[i].substring(5) < "270") || (key[i] == "EECS 280"))) {
+			if(ULCS && ((key[i]["coursenumber"] < "270") || (key[i]["deparment"] + " " + key[i]["coursenumber"] == "EECS 280"))) {
 				continue;
 			}
-			recommendations.push(key[i] + ": " + course_Prereqs[key[i]][0]);
+			if(key[i]["difficulty"]){
+			recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0],"difficulty": key[i]["difficulty"]});     
+			//recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0] + " Difficulty: " + key[i]["difficulty"].toString());
 		}
+			else{
+				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
+			}
+		}
+		
 	}
+
+	function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+	recommendations = sortByKey(recommendations,"difficulty");
 	console.log(recommendations);
 	res.writeHead(200, {"Content-Type": "application/json"});
 	var json = JSON.stringify({courseReqs: recommendations});
 
 	res.end(json);
+ 
+});
   });
 
 
