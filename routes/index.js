@@ -182,7 +182,7 @@ router.post("/createsuggestions",function(req,res){
 			//recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0] + " Difficulty: " + key[i]["difficulty"].toString());
 		}
 			else{
-				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
+				recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]});
 			}
 		}
 		
