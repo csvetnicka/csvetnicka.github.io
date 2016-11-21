@@ -11,6 +11,7 @@ var http = require("http");
 var request = require("request");
 var https = require("https");
 
+
 var app = express();
 var index = require("./routes/index");
 var courseGuide = require("./routes/courseguide");
@@ -33,8 +34,31 @@ app.use(express.static(publicPath)); //Every file available in the Public folder
 
 const MongoClient = require('mongodb').MongoClient
 
+var token = undefined;
+
+request({
+  url: 'https://api-km.it.umich.edu/token',
+  headers: {    
+    "Authorization": "Basic MlBXNFFEM2dHT2d5RElDQm0zZjIyZnZhcGFnYTpnNzJrUUlfZjRuMjRkWlBWMWNlZjZackFOODBh",
+  "Content-Type": "application/x-www-form-urlencoded"},
+  method: 'POST',
+ 
+  form: {
+  'grant_type': 'client_credentials',
+    'scope': 'PRODUCTION',
+  }
+}, function(err, res) {
+  var json = JSON.parse(res.body);
+  token = json.access_token;
+  console.log("Token = " + token);
+  exports.token = token;
+  //console.log(err);
+// console.log("Access Token:", json.access_token);
+//console.log("Bearer " + token);
 
 
+
+});
  
 var callback = function(professor) {
   if (professor === null) {

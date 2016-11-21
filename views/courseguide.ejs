@@ -4,28 +4,28 @@
 <div class="col-md-4">
 </div>
 <div class="col-md-4">
-<form class="pure-form pure-form-stacked">
+<form class="pure-form pure-form-stacked" action="http://localhost:3000/courseguide" method="get">
     <fieldset>
         <legend>Course Guide</legend>
 
         <label for="term">Term</label>
-        <select id="term-input">
+        <select name="term" id="term-input">
         	<option> Fall 2016 </option>
         	<option> Winter 2017 </option>
         </select>
 
         <label for="school">School</label>
-        <select id="school-input">
+        <select name="school"id="school-input">
         	<option> College of Engineering </option>
         </select>
 
         <label for="department">Department</label>
-        <select id="department-input">
+        <select name="department" id="department-input">
             <option>EECS</option>
            
         </select>
         <label for="course"> Course </label>
-        <input id="course-input" type="text" placeholder="EECS 281" />
+        <input name="course" id="course-input" type="text" placeholder="EECS 281" />
 
 
         <button type="submit" class="pure-button pure-button-primary" id="courseguide-submit">Search</button>
