@@ -104,7 +104,8 @@ router.post("/createsuggestions",function(req,res){
 	var ULCS = false;
 	var took_281 = false;
 	Taken = []
-
+	console.log("Ascending = " + req.body.ascending);
+	console.log("descending =" + req.body.descending);
 	for (var i = 0; i < req.body.numCourses; i++) {
 		var took_course = req.body[takenKeys[i]].toUpperCase();
 		Taken.push(took_course);
@@ -186,14 +187,22 @@ router.post("/createsuggestions",function(req,res){
 		}
 		
 	}
-
-	function sortByKey(array, key) {
-    return array.sort(function(a, b) {
-        var x = a[key]; var y = b[key];
-        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
-    });
+	if(req.body.ascending){
+		recommendations = recommendations.sort(function(a,b){
+			return a["difficulty"] - b["difficulty"];
+		});
 }
-	recommendations = sortByKey(recommendations,"difficulty");
+		
+
+	if(req.body.descending){ 
+
+		recommendations = recommendations.sort(function(a,b){
+			return b['difficulty'] - a["difficulty"];
+		});
+}
+
+
+
 	console.log(recommendations);
 	res.writeHead(200, {"Content-Type": "application/json"});
 	var json = JSON.stringify({courseReqs: recommendations});

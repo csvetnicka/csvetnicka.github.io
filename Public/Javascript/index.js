@@ -43,6 +43,9 @@ var firstPadding = true
 			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
 		}
 		coursesTaken["numCourses"] = numAdded;
+		coursesTaken["ascending"] = $("#ascending").is(":checked");
+	    coursesTaken["descending"] = $("#descending").is(":checked");
+		
 
 		//console.log(coursesTaken);
 		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions", 
