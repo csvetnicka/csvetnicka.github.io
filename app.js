@@ -68,7 +68,7 @@ var callback = function(professor) {
   console.log(professor);
 };
  
-//rmp.get("Elliot Soloway", callback);
+rmp.get("Michael Smith", callback);
 MongoClient.connect('mongodb://ksandera:number18@ds145667.mlab.com:45667/myscheduleplus', (err, database) => {
   	  if (err) return console.log(err)
    db = database
