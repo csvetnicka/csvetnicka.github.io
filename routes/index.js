@@ -101,20 +101,12 @@ router.post("/createsuggestions",function(req,res){
 
 	//Store Courses user has taken (For comparison)
 	var takenKeys = Object.keys(req.body);
-	var ULCS = false;
-	var took_281 = false;
 	Taken = []
 	console.log("Ascending = " + req.body.ascending);
 	console.log("descending =" + req.body.descending);
 	for (var i = 0; i < req.body.numCourses; i++) {
 		var took_course = req.body[takenKeys[i]].toUpperCase();
 		Taken.push(took_course);
-		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) >= "280")) {
-			ULCS = true;
-		}
-		if ((took_course.substring(0,4) == "EECS") && (took_course.substring(5) >= "281")) {
-			took_281 = true;
-		}
 	}
 	
 	//Compare taken courses to prereqs and return recommendations
@@ -124,6 +116,20 @@ router.post("/createsuggestions",function(req,res){
 	var recommendations =[]
 	var key = result;
 	var size = result.length;
+
+	var course_additions = []
+	for (var i = 0; i < Taken.length; i++) {
+		for (var j = 0; j < size; j++) {
+			if (Taken[i].substring(5) == key[j]["coursenumber"]) {
+				for (var course = 1; course < key[j]["prerequisites"].length; course++) {
+					if (key[j]["prerequisites"][course] != "|" && key[j]["prerequisites"][course] != "EECS 270") {
+						course_additions.push(key[j]["prerequisites"][course].toUpperCase());
+					}
+				}
+			}
+		}
+	}
+	Taken = Taken.concat(course_additions);
 	
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
@@ -133,7 +139,7 @@ router.post("/createsuggestions",function(req,res){
 			//All Required
 			var canTake = true;
 			while((j < check.length) && (check[j] != '|')) {
-				if ((Taken.indexOf(check[j]) == -1) && !took_281) {
+				if (Taken.indexOf(check[j]) == -1) {
 					canTake = false;
 					break; //No need to check further
 				}
@@ -174,7 +180,7 @@ router.post("/createsuggestions",function(req,res){
 				continue; //User will not be given credit for this course
 			}
 			
-			if(ULCS && ((key[i]["coursenumber"] < "270") || (key[i]["deparment"] + " " + key[i]["coursenumber"] == "EECS 280"))) {
+			if(((key[i]["coursenumber"] < "270") || (key[i]["deparment"] + " " + key[i]["coursenumber"] == "EECS 280"))) {
 				continue;
 			}
 			if(key[i]["difficulty"]){
@@ -182,11 +188,12 @@ router.post("/createsuggestions",function(req,res){
 			//recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0] + " Difficulty: " + key[i]["difficulty"].toString());
 		}
 			else{
-				recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]});
+				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
 			}
 		}
 		
 	}
+
 	if(req.body.ascending){
 		recommendations = recommendations.sort(function(a,b){
 			return a["difficulty"] - b["difficulty"];
