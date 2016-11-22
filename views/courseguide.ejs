@@ -4,6 +4,8 @@
 <div class="col-md-4">
 </div>
 <div class="col-md-4">
+<div id="dataholder">
+</div>
 <form class="pure-form pure-form-stacked" action="http://localhost:3000/courseguide" method="get">
     <fieldset>
         <legend>Course Guide</legend>
@@ -28,7 +30,7 @@
            
         </select>
         <label for="course"> Course </label>
-        <input name="course" id="course-input" type="text" placeholder="EECS 281" />
+        <input name="course" id="course-input" type="text" list="courses" />
 
 
         <button type="submit" class="pure-button pure-button-primary" id="courseguide-submit">Search</button>
