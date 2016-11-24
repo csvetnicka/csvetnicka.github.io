@@ -1,12 +1,13 @@
 <% include header %>
 <div class="container-fluid">
+<script src="javascript/courseguide.js" type="text/javascript"> </script>
 <div class="row">
 <div class="col-md-4">
 </div>
 <div class="col-md-4">
 <div id="dataholder">
 </div>
-<form class="pure-form pure-form-stacked" action="http://localhost:3000/courseguide" method="get">
+<form class="pure-form pure-form-stacked" action="http://localhost:3000/courseguide/search" method="get">
     <fieldset>
         <legend>Course Guide</legend>
 
@@ -17,7 +18,7 @@
         </select>
 
         <label for="school">School</label>
-        <select name="school"id="school-input">
+        <select placeholder="College of Engineering" name="school"id="school-input">
         	<option> College of Engineering </option>
             <option> Literature, Science & the Arts </option>
             <option> School of Education </option>

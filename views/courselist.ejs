@@ -1,23 +1,8 @@
 <% include header %>
+<h1> Course Description </h1>
+<h3> <%= course %> </h3>
+<p> <%= description %> </p>
 
-<% if(courses.length > 0){ %>
-<table class="pure-table pure-table-horizontal">
-<thead>
-        <tr>
-            <th>#</th>
-            <th>Title</th>
-            <th>Credits</th>
-            <th>Req</th>
-        </tr>
-    </thead>
-    <tbody>
-<% courses.forEach(function(course){ %>
 
-		
-       <tr> <td> <%=course.CatalogNumber %> </td> <td> <%=course.CourseDescr %> </td> </tr>
-<%}) %>
-	</tbody>
-	</table>
-<%} %>
 
 <%include footer %>

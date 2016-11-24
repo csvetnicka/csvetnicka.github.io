@@ -7,54 +7,59 @@ var schoolCodes = {"Architecture & Urban Planning": "AUP", "Dental Hygiene": "DH
 "Ross School of Business": "BA"};
 var terms = {"Winter 2017": "2120", "Fall 2016": "2110"};
 guide.get("/",function(req,res,next){
-	var initialRes = res;
-	//console.log("Here in the course guide homepage");
-	if(typeof(req.query.term) == "undefined"){
-	res.render("courseguide");
-}
-else{
-	request({
-  url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/' + terms[req.query.term] + "/Schools/" + schoolCodes[req.query.school] + "/Subjects",
+  var initialRes = res;
+  //console.log("Here in the course guide homepage");
+  console.log(typeof(req.query.term) + " TYPES");
+ res.render("courseguide");
+
+
+});
+
+
+guide.get("/search",function(req,initialRes,next){
+
+ var departmentCode = "";
+ var courseNumber = "";
+ var termCode = terms[req.query.term];
+ var schoolCode = schoolCodes[req.query.school];
+ for(var i = 0; i < req.query.course.length; i++){
+  if(req.query.course.charAt(i) === ' '){
+    departmentCode = req.query.course.substring(0,i);
+    courseNumber = req.query.course.substring(i + 1, i + 4);
+    break;
+  }
+ }
+ console.log(termCode);
+ console.log(schoolCode);
+ 
+  request({
+  url:  "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/" + termCode + "/Schools/" + schoolCode + "/Subjects/" + departmentCode + "/CatalogNbrs/" + courseNumber,
   headers: {    
     "Authorization": "Bearer " + config.token,
   "Accept": "application/json"},
   method: 'GET',
  
-}, function(err, res) {
-  var json = JSON.parse(res.body);
-  //console.log(json.getSOCSubjectsResponse.Subject);
-  var subjectCode = ""
-  for(var i = 0; i < json.getSOCSubjectsResponse.Subject.length; i++){
-  			if(json.getSOCSubjectsResponse.Subject[i].SubjectShortDescr == req.query.department){
-  				subjectCode = json.getSOCSubjectsResponse.Subject[i].SubjectCode;
-  			}
-  }
-  console.log("Subject code = " + subjectCode);
-
-  request({url:'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/' + terms[req.query.term] + "/Schools/" + schoolCodes[req.query.school] + "/Subjects/" + subjectCode + "/CatalogNbrs",
-   headers: {
-   	"Authorization": "Bearer " + config.token,
-   	"Accept": "application/json"},
-   	method: "GET"
-   }, function(err,res){
-   		var thisjson = JSON.parse(res.body);
-   	
-   	//	console.log(thisjson.getSOCCtlgNbrsResponse.ClassOffered);
-   	//	console.log(thisjson.getSOCCtlgNbrsResponse.ClassOffered.length);
-   		initialRes.render("courselist",{courses: thisjson.getSOCCtlgNbrsResponse.ClassOffered});
-
-   } );
-});
-
-
-}
+}, function(err, apiRes) {
+    var subjectsResponse = JSON.parse(apiRes.body);
+    var description = {
+      "course": req.query.course,
+      "description": subjectsResponse.getSOCCourseDescrResponse.CourseDescr
+    };
+    return initialRes.render("courselist",description);
+  
+})
 
 });
 
+
+
+
+//Get Departments
 guide.get("/getdepartments",function(req,res,next){
  // console.log("SCHooz" + req.query.school);
 
   var schoolCode = schoolCodes[req.query.school];
+ 
   request({
   url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/' + schoolCode +  "/Subjects",
   headers: {    
@@ -64,7 +69,12 @@ guide.get("/getdepartments",function(req,res,next){
  
 }, function(err, apiRes) {
     var subjectsResponse = JSON.parse(apiRes.body);
+    console.log(subjectsResponse);
+   
    var schoolSubjects = subjectsResponse.getSOCSubjectsResponse.Subject;
+   if(!schoolSubjects){
+    res.end();
+   }
    var subjectsResponse = []
    for(var i = 0; i < schoolSubjects.length; i++){
     subjectsResponse.push(schoolSubjects[i]["SubjectDescr"]);
@@ -77,6 +87,11 @@ guide.get("/getdepartments",function(req,res,next){
   //res.end();
 });
 
+
+
+
+
+//Get autocomplete courses
 guide.get("/getcourses",function(req,res,next){
     var schoolCode = schoolCodes[req.query.school];
     var department = req.query.department;
@@ -89,7 +104,9 @@ guide.get("/getcourses",function(req,res,next){
   method: 'GET',
  
 }, function(err, apiRes) {
+
     var subjectsResponse = JSON.parse(apiRes.body);
+    console.log(subjectsResponse);
    var schoolSubjects = subjectsResponse.getSOCSubjectsResponse.Subject;
    var departmentCode = "";
    for(var i = 0; i < schoolSubjects.length; i++){
@@ -98,7 +115,7 @@ guide.get("/getcourses",function(req,res,next){
       break;
     }
    }
-   console.log("Department code " + departmentCode);
+   
       request({
   url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/' + schoolCode +  "/Subjects/" + departmentCode + "/CatalogNbrs",
   headers: {    
@@ -108,10 +125,11 @@ guide.get("/getcourses",function(req,res,next){
  
 }, function(err, apiDepartmentResult) {
     var departmentResponse = JSON.parse(apiDepartmentResult.body);
-    console.log("Department response");
     console.log(departmentResponse);
+
     var courseNames = [];
     var courses = departmentResponse.getSOCCtlgNbrsResponse.ClassOffered;
+    if(courses){
     for(var i = 0; i < courses.length; i++){
       courseNames.push(departmentCode + " " + courses[i].CatalogNumber + ": " + courses[i].CourseDescr);
     }
@@ -120,6 +138,10 @@ guide.get("/getcourses",function(req,res,next){
    var json = JSON.stringify({"courses": courseNames});
    //console.log("JSON" + json);
    res.end(json);
+ }
+ else{
+  res.sendStatus(404);
+ }
    
     
 })
