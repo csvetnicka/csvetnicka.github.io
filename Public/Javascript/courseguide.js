@@ -23,10 +23,10 @@ function getCourses(department){
 		method: "GET",success: function(data,status,xhr){
 			var courses = data.courses;
 			if(courses){
-			$("#courses").empty();
+			$("#course-input").empty();
 			$("#dataholder").append("<datalist id='courses' >");
 			for(var i = 0; i < courses.length; i++){
-				$("#courses").append("<option>" + courses[i] + "</option>");
+				$("#course-input").append("<option>" + courses[i] + "</option>");
 
 			}
 			$("#dataholder").append("</datalist>")
@@ -36,14 +36,6 @@ function getCourses(department){
 }
 
 
-function courseInformation(){
-	var term = $("#term-input").val()
-	var school =  $("#school-input").val();
-	var department = $("#department-input").val();
-	var course = $("#course-input").val();
-	console.log(term + " " + school + " " + department + " " + course-input);
-
-}
 
 $(document).ready(function(){
 	console.log("Course guide loaded");
