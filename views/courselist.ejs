@@ -2,6 +2,57 @@
 <h1> Course Description </h1>
 <h3> <%= course %> </h3>
 <p> <%= description %> </p>
+<h4> Section Information </h4>
+<% if(sectionInformation.length  > 0){ %>
+<table class="pure-table pure-table-bordered">
+<thead>
+<tr>
+<th>
+Section
+</th>
+<th>
+Credits
+</th>
+<th>
+Available Seats
+</th>
+<th>
+Day/Time
+</th>
+<th>
+Instructor
+</th>
+</tr>
+</tr>
+</thead>
+<tbody>
+<% for(var i = 0; i < sectionInformation.length; i++) { %>
+<tr>
+<td>
+<%= sectionInformation[i].SectionNumber + "(" + sectionInformation[i].SectionTypeDescr  + ")" %>
+</td>
+<td>
+<%= sectionInformation[i].CreditHours %>
+</td>
+<td>
+<%= sectionInformation[i].AvailableSeats %>
+</td>
+<td>
+<%= sectionInformation[i].Days + " " + sectionInformation[i].Times %>
+</td>
+<td>
+Professors
+
+</td>
+<%} %>
+
+
+</tbody>
+
+</table>
+<%} %>
+
+
 
 
 

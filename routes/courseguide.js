@@ -2,6 +2,7 @@ var express = require("express");
 var guide = express.Router();
 var request = require("request");
 var config = require("./../app.js");
+var rmp = require("rmp-api");
 var schoolCodes = {"Architecture & Urban Planning": "AUP", "Dental Hygiene": "DH", "Dentistry": "DEN",
 "School of Education": "EDU", "College of Engineering": "ENG", "Information": "INF", "Kinesiology": "KIN", "Literature, Science & the Arts": "LSA",
 "Ross School of Business": "BA"};
@@ -45,7 +46,44 @@ guide.get("/search",function(req,initialRes,next){
       "course": req.query.course,
       "description": subjectsResponse.getSOCCourseDescrResponse.CourseDescr
     };
+
+   // return initialRes.render("courselist",description);
+
+    request({
+  url:  "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/" + termCode + "/Schools/" + schoolCode + "/Subjects/" + departmentCode + "/CatalogNbrs/" + courseNumber + "/Sections",
+  headers: {    
+    "Authorization": "Bearer " + config.token,
+  "Accept": "application/json"},
+  method: 'GET',
+ 
+}, function(err, sectionRes) {
+    var sectionResponse = JSON.parse(sectionRes.body);
+    var sections = sectionResponse.getSOCSectionsResponse.Section;
+    var sectionInformation = [];
+    console.log("SECTIONs");
+    console.log(sections);
+    for(var i = 0; i < sections.length; i++){
+      var info = {};
+      info.SectionNumber = sections[i].SectionNumber;
+      info.SectionTypeDescr = sections[i].SectionTypeDescr;
+      info.CreditHours = sections[i].CreditHours;
+      info.AvailableSeats = sections[i].AvailableSeats;
+      info.Days = sections[i].Meeting.Days;
+      info.Times = sections[i].Meeting.Times;
+      info.InstructorNames = sections[i].ClassInstructors
+      sectionInformation.push(info);
+      console.log(info.InstructorNames);
+    //  console.log(info);
+
+    }
+
+    description["sectionInformation"] = sectionInformation;
+    console.log("Section Information: ");
+    console.log(sectionInformation);
     return initialRes.render("courselist",description);
+  
+})
+   
   
 })
 
