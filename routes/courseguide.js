@@ -110,8 +110,10 @@ guide.get("/search",function(req,initialRes,next){
     console.log("Section Information: ");
     console.log(sectionInformation);
     db.collection("courses").find({"department": departmentCode, "coursenumber": courseNumber}).toArray(function(err, response){
+      if(response.length > 0){
       description.comments = response[0].comments;
       console.log(description.comments);
+    }
    return initialRes.render("courselist",description);
     });
    
