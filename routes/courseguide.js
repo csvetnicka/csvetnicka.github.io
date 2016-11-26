@@ -16,7 +16,36 @@ guide.get("/",function(req,res,next){
 
 });
 
+guide.post("/addcomment",function(req,res,next){
 
+  var department = "";
+  var courseNum = ""
+  for(var i = 0; i < req.body.course.length; i++){
+    if(req.body.course.charAt(i) === ' '){
+      department = req.body.course.substring(0,i);
+      courseNum = req.body.course.substring(i + 1, i + 4);
+      break;
+    }
+  }
+  db.collection("courses").find({"department": department,"coursenumber": courseNum}).toArray(function(err,results){
+      if(results.length === 0){
+        console.log("Shouldn't be here");
+        var comments = [];
+        comments.push(req.body.comment);
+        db.collection("courses").insert({"department": department, "coursenumber": courseNum, "comments": comments});
+      }
+      else if(typeof(results[0].comments) === "undefined"){
+         var comments = [];
+        comments.push(req.body.comment);
+        db.collection("courses").update({"department": department,"coursenumber": courseNum},{"$set":{"comments": comments}});
+      }
+      else{
+        db.collection("courses").update({"department": department,"coursenumber": courseNum},{"$push": {"comments": req.body.comment}});
+        }
+      }
+  );
+
+});
 guide.get("/search",function(req,initialRes,next){
 
  var departmentCode = "";
@@ -80,7 +109,12 @@ guide.get("/search",function(req,initialRes,next){
     description["sectionInformation"] = sectionInformation;
     console.log("Section Information: ");
     console.log(sectionInformation);
-    return initialRes.render("courselist",description);
+    db.collection("courses").find({"department": departmentCode, "coursenumber": courseNumber}).toArray(function(err, response){
+      description.comments = response[0].comments;
+      console.log(description.comments);
+   return initialRes.render("courselist",description);
+    });
+   
   
 })
    
@@ -133,6 +167,7 @@ guide.get("/getdepartments",function(req,res,next){
 guide.get("/getcourses",function(req,res,next){
     var schoolCode = schoolCodes[req.query.school];
     var department = req.query.department;
+    console.log(schoolCode);
     console.log("This is " + department);
      request({
   url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/' + schoolCode +  "/Subjects",
@@ -153,15 +188,18 @@ guide.get("/getcourses",function(req,res,next){
       break;
     }
    }
-   
+   console.log("SCHOOLCODE= " + schoolCode);
+    console.log("Deparmetn code = " + department);
       request({
-  url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/' + schoolCode +  "/Subjects/" + departmentCode + "/CatalogNbrs",
+
+  url: "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/" + schoolCode + "/Subjects/" + departmentCode +"/CatalogNbrs",
   headers: {    
     "Authorization": "Bearer " + config.token,
   "Accept": "application/json"},
   method: 'GET',
  
 }, function(err, apiDepartmentResult) {
+    console.log("This is the response" + apiDepartmentResult);
     var departmentResponse = JSON.parse(apiDepartmentResult.body);
     console.log(departmentResponse);
 

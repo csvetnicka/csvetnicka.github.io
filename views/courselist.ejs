@@ -1,6 +1,7 @@
 <% include header %>
+<script src="../javascript/courselist.js" type="text/javascript"> </script>
 <h1> Course Description </h1>
-<h3> <%= course %> </h3>
+<h3 id="course-name"><%= course %></h3>
 <p> <%= description %> </p>
 <h4> Section Information </h4>
 <% if(sectionInformation.length  > 0){ %>
@@ -53,7 +54,29 @@ Professors
 <%} %>
 
 
+<h4> Course Reviews </h4>
+<form id="comment-form" >
+<div>
+<textarea id="comment-text" name="comments" style="width: 500px;" id="comments" style="font-family:sans-serif;font-size:1.2em;">
+Enter your Course Review!
+</textarea>
+</div>
+<button id="add-comment" type="submit" class="btn btn-primary">Add Comment </button>
+</form>
+<table class="pure-table pure-table-bordered">
+<thead>
+<tr>
+<th> Comments </th>
+</tr>
+</thead>
+<tbody>
+
+<% for(var j = 0; j < comments.length; j++){ %>
+<tr> <td> <%=comments[j] %> </td> </tr>
+<% } %>
 
 
+</tbody>
+</table>
 
 <%include footer %>

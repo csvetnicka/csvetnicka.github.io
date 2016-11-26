@@ -18,7 +18,7 @@ method: "GET", success: function(data,status,xhr){
 function getCourses(department){
 	var encodedDepartment = encodeURIComponent(department);
 	var encodedSchool = encodeURIComponent($("#school-input").val());
-	console.log(encodedSchool);
+
 	$.ajax({url: "http:///localhost:3000/courseguide/getcourses?department=" + encodedDepartment + "&school=" + encodedSchool,
 		method: "GET",success: function(data,status,xhr){
 			var courses = data.courses;
