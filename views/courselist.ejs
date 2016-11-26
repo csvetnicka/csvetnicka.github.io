@@ -69,7 +69,7 @@ Enter your Course Review!
 <th> Comments </th>
 </tr>
 </thead>
-<tbody>
+<tbody id="comment-body">
 <% if(typeof(comments) != "undefined") { %>
 <% for(var j = 0; j < comments.length; j++){ %>
 <tr> <td> <%=comments[j] %> </td> </tr>
