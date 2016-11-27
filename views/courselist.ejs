@@ -1,9 +1,23 @@
 <% include header %>
 <script src="../javascript/courselist.js" type="text/javascript"> </script>
-<h1> Course Description </h1>
-<h3 id="course-name"><%= course %></h3>
+<div class="row">
+<div class="col-md-4">
+</div>
+<div class="col-md-4">
+<h3 id="course-name"><%=department + " " + courseNumber + ": " + title %></h3>
+</div>
+
+</div>
+<div class="row">
+<div class="col-md-12">
 <p> <%= description %> </p>
-<h4> Section Information </h4>
+</div>
+</div>
+<div class="row">
+<div class="col-md-2">
+</div>
+<div class="col-md-8">
+<h4 style="text-align: center; vertical-align: middle;"> Section Information </h4>
 <% if(sectionInformation.length  > 0){ %>
 <table class="pure-table pure-table-bordered">
 <thead>
@@ -52,9 +66,13 @@ Professors
 
 </table>
 <%} %>
-
-
-<h4> Course Reviews </h4>
+</div>
+</div>
+<div class="row">
+<div class="col-md-2">
+</div>
+<div class="col-md-8"
+<h4 style="text-align: center; vertical-align: middle"> Course Reviews </h4>
 <form id="comment-form" >
 <div>
 <textarea id="comment-text" name="comments" style="width: 500px;" id="comments" style="font-family:sans-serif;font-size:1.2em;">
@@ -63,7 +81,7 @@ Enter your Course Review!
 </div>
 <button id="add-comment" type="submit" class="btn btn-primary">Add Comment </button>
 </form>
-<table class="pure-table pure-table-bordered">
+<table class="table table-striped">
 <thead>
 <tr>
 <th> Comments </th>
@@ -79,5 +97,7 @@ Enter your Course Review!
 
 </tbody>
 </table>
+</div>
+</div>
 
 <%include footer %>

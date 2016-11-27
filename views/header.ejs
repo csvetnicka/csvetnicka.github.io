@@ -31,17 +31,67 @@
 
 				 <div>
 				 		<ul class="nav navbar-nav side">
-				 				
+
 				 				<li class="active">
 				 					<a href="http://localhost:3000"> Course Recommendations </a>
 				 				</li>
 				 				<li class="active">
 				 					<a href="#"> About </a>
 				 				</li>
-				 				<li class="active">
-				 					<a href="http://localhost:3000/courseguide"> Course Guide </a>
-				 				</li>
-				 			
+				 				<li class="dropdown active">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">Course Guide <span class="caret"></span></a>
+                        <ul class="dropdown-menu dropdown-lr animated flipInX" role="menu">
+                            <div class="row">
+                                <div class="col-md-1">
+                                </div>
+                                <div class="col-md-10">
+                                <form class="pure-form pure-form-stacked" action="http://localhost:3000/courseguide/search" method="get">
+    <fieldset>
+
+
+
+                                       <label for="term">Term</label>
+                                         <select name="term" id="term-input">
+                                                <option> Fall 2016 </option>
+                                                 <option> Winter 2017 </option>
+                                            </select>
+
+
+
+                                        <label for="school">School</label>
+                                      <select placeholder="College of Engineering" name="school"id="school-input">
+                                      <option> College of Engineering </option>
+                                          <option> Literature, Science & the Arts </option>
+                                          <option> School of Education </option>
+                                          <option> Ross School of Business </option>
+                                    </select>
+
+
+
+                             <label for="department">Department</label>
+                                        <select name="department" placeholder="Select School" id="department-input">
+
+
+                                         </select>
+                                 <label for="course"> Course </label>
+                             <select name="course" id="course-input" type="text" list="courses" >
+                                     </select>
+
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-xs-6 col-xs-offset-3">
+                                                <input type="submit" name="search-submit" id="search-submit" tabindex="4" class="form-control btn btn-info" value="Search Now">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <input type="hidden" class="hide" name="token" id="token" value="7c6f19960d63f53fcd05c3e0cbc434c0">
+                                 </fieldset>
+                            </form>
+                        </div>
+
+                        </ul>
+                    </li>
+
 
 				 		</ul>
 				 		<ul class="nav navbar-nav navbar-right">
