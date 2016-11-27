@@ -60,8 +60,7 @@ guide.get("/search",function(req,initialRes,next){
     break;
   }
  }
- console.log(termCode);
- console.log(schoolCode);
+
 
   request({
   url:  "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/" + termCode + "/Schools/" + schoolCode + "/Subjects/" + departmentCode + "/CatalogNbrs/" + courseNumber,
@@ -98,10 +97,10 @@ guide.get("/search",function(req,initialRes,next){
 
 }, function(err, sectionRes) {
     var sectionResponse = JSON.parse(sectionRes.body);
+    console.log(sectionResponse);
     var sections = sectionResponse.getSOCSectionsResponse.Section;
     var sectionInformation = [];
     console.log("SECTIONs");
-    console.log(sections);
     for(var i = 0; i < sections.length; i++){
       var info = {};
       info.SectionNumber = sections[i].SectionNumber;
@@ -110,16 +109,37 @@ guide.get("/search",function(req,initialRes,next){
       info.AvailableSeats = sections[i].AvailableSeats;
       info.Days = sections[i].Meeting.Days;
       info.Times = sections[i].Meeting.Times;
-      info.InstructorNames = sections[i].ClassInstructors
+      info.Instructors = [];
+      if(typeof(sections[i].ClassInstructors) != "undefined"){
+        if(typeof(sections[i].ClassInstructors.length) == "undefined"){
+         var name = sections[i].ClassInstructors.InstrName;
+         for(var j = 0; j < name.length; j++){
+          if(name.charAt(j) == ","){
+            name = name.substring(j + 1) + " " + name.substring(0,j);
+            break;
+          }
+         }
+         info.Instructors.push({"name": name, "rating": ""});
+        }
+        else{
+          for(var j = 0; j < sections[i].ClassInstructors.length; j++){
+             var name = sections[i].ClassInstructors[j].InstrName;
+         for(var j = 0; j < name.length; j++){
+          if(name.charAt(j) == ","){
+            name = name.substring(j + 1) + " " + name.substring(0,j);
+            break;
+          }
+         }
+        info.Instructors.push({"name": name, "rating": ""});          }
+        }
+      }
       sectionInformation.push(info);
-      console.log(info.InstructorNames);
+
     //  console.log(info);
 
-    }
-
+   }
     description["sectionInformation"] = sectionInformation;
-    console.log("Section Information: ");
-    console.log(sectionInformation);
+    console.log(JSON.stringify(sectionInformation[0].Instructors[0]));
     db.collection("courses").find({"department": departmentCode, "coursenumber": courseNumber}).toArray(function(err, response){
       if(response.length > 0){
       description.comments = response[0].comments;

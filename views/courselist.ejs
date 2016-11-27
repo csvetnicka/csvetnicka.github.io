@@ -56,8 +56,9 @@ Instructor
 <%= sectionInformation[i].Days + " " + sectionInformation[i].Times %>
 </td>
 <td>
-Professors
-
+<% for(var a = 0; a < sectionInformation[i].Instructors.length; a++){ %>
+<%=sectionInformation[i].Instructors[a].name  %>
+<%} %>
 </td>
 <%} %>
 

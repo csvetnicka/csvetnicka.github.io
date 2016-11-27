@@ -1,4 +1,42 @@
 
+
+function getDepartments(school){
+	var encodedSchool = encodeURI(school);
+	console.log(school + " IS");
+		$("#department-input").empty();
+	$.ajax({url: "http://localhost:3000/courseguide/getdepartments?school=" + encodeURIComponent(school),
+method: "GET", success: function(data,status,xhr){
+		var departments = data.departments;
+		console.log("DATA" + data);
+
+		for(var i = 0; i < departments.length; i++){
+			$("#department-input").append("<option>" + departments[i] + "</option>");
+		}
+		getCourses($("#department-input").val());
+}});
+}
+
+function getCourses(department){
+	var encodedDepartment = encodeURIComponent(department);
+	var encodedSchool = encodeURIComponent($("#school-input").val());
+
+	$.ajax({url: "http:///localhost:3000/courseguide/getcourses?department=" + encodedDepartment + "&school=" + encodedSchool,
+		method: "GET",success: function(data,status,xhr){
+			var courses = data.courses;
+			if(courses){
+			$("#course-input").empty();
+			$("#dataholder").append("<datalist id='courses' >");
+			for(var i = 0; i < courses.length; i++){
+				$("#course-input").append("<option>" + courses[i] + "</option>");
+
+			}
+			$("#dataholder").append("</datalist>")
+		}
+
+		} });
+}
+
+
 $(document).ready(function(){
 var once = false; //Have course recommendations already been given
 var numAdded = 0;
@@ -10,7 +48,7 @@ var firstPadding = true
 			if(firstPadding){
 
 
-				$("#add-class-form").append('<div class="form-group top-input input-sm" style="padding-top: 15px; padding-bottom: 30px;" ><input list="classes" type="text" class="form-control"' + 
+				$("#add-class-form").append('<div class="form-group top-input input-sm" style="padding-top: 15px; padding-bottom: 30px;" ><input list="classes" type="text" class="form-control"' +
 					courseAddition + '</div>');
 				firstPadding = false
 				numAdded += 1;
@@ -34,7 +72,16 @@ var firstPadding = true
 	$(".m").click(function(){
 		$("#major").html(event.target.text); //Change Major dropdown to selected element
 	});
+	console.log("Course guide loaded");
+	getDepartments($("#school-input").val());
 
+	$("#school-input").change(function(){
+		getDepartments($("#school-input").val());
+	});
+
+	$("#department-input").change(function(){
+		getCourses($("#department-input").val());
+	});
 	var courseInformation = {};
 	$("#course-submit").click(function(){
 		if(!once){
@@ -45,10 +92,10 @@ var firstPadding = true
 		coursesTaken["numCourses"] = numAdded;
 		coursesTaken["ascending"] = $("#ascending").is(":checked");
 	    coursesTaken["descending"] = $("#descending").is(":checked");
-		
+
 
 		//console.log(coursesTaken);
-		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions", 
+		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions",
     contentType: 'application/json; charset=utf-8',
     dataType: 'json',
     async: true, data: JSON.stringify(coursesTaken),
@@ -69,7 +116,7 @@ var firstPadding = true
 					$("#rec-list").append("</div> </div>");
 					courseInformation[coursename] = false;
 
-				
+
 				}
 			once = true;
 			}});
@@ -88,12 +135,12 @@ var firstPadding = true
 			success: function(data,status, xhr){
 					$("#" + "div" + id).append("<div class='well course-info img-rounded' style='padding:-100px;'><p>" + data.description + "<h4> <a href='http://www.lsa.umich.edu/cg/cg_detail.aspx?content=2110EECS" + course.substring(4,7) + "001&termArray=f_16_2110'> Course Schedule </a> </h4>" + "</p> </div>");
 				}
-			
+
 			});
 
 		}
 
 		courseInformation[event.target.id] = true;
-		
+
 	});
 });
