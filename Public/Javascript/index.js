@@ -38,7 +38,7 @@ function getCourses(department){
 
 
 $(document).ready(function(){
-var once = false; //Have course recommendations already been given
+//var once = false; //Have course recommendations already been given
 var numAdded = 0;
 var course = "course";
 var firstPadding = true
@@ -84,7 +84,7 @@ var firstPadding = true
 	});
 	var courseInformation = {};
 	$("#course-submit").click(function(){
-		if(!once){
+
 		var coursesTaken = {}
 		for(var i = 0; i < numAdded; i++){
 			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
@@ -103,6 +103,7 @@ var firstPadding = true
 				console.log("success");  //
 				reqs = data.courseReqs;
 				console.log(reqs);
+				$("#rec-list").empty();
 				$("#rec-list").append("<h2 class='text-center'> Your Computer Science Course Recommendations </h2>");
 				for(var i = 0; i < reqs.length; i++){
 					newId = "req" + i.toString();
@@ -118,9 +119,9 @@ var firstPadding = true
 
 
 				}
-			once = true;
+
 			}});
-	}
+
 		return false;
 	});
 
