@@ -155,9 +155,10 @@ guide.get("/search",function(req,initialRes,next){
     console.log("The SECTION RESPONSE");
     console.log(sectionResponse);
     var sections = sectionResponse.getSOCSectionsResponse.Section;
+    console.log(sections);
     var sectionInformation = [];
   //  console.log("SECTIONs");
-    console.log("SECTOIN UNDEFINED" + sections.length);
+    //console.log("SECTOIN UNDEFINED" + sections.length);
     if(typeof(sections.length) == "undefined"){
       sectionInformation.push(sectionDescription(sections));
     }

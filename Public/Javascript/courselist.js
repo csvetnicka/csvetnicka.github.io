@@ -51,7 +51,7 @@ type: "get", success: function(data,status,xhr){
 
 $(document).ready(function(){
 	console.log("This document is in fact ready");
-	$("form").submit(function(e){
+	$("#comment-form").submit(function(e){
 		e.preventDefault();
 		var comment = $("#comment-text").val();
 		//console.log($("#comment-text").val());
