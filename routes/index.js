@@ -25,7 +25,7 @@ courses["EECS"].sort();
 //"|" allows for differentiation: [(Course Name), All Required,..., | , One Of,..., |, No Credit,...]
 /*
 var course_Prereqs = { "ENGR 101" : ["Intro Comp&Prog", "|", "|", "ENGR 151", "EECS 183"],
-					   "EECS 183" : ["Elementary Programming Concepts", "|", "|", "ENGR 101", "ENGR 151"], 
+					   "EECS 183" : ["Elementary Programming Concepts", "|", "|", "ENGR 101", "ENGR 151"],
 					   "EECS 203" : ["Discrete Mathematics", "|", "MATH 115", "MATH 116", "MATH 119", "MATH 120", "MATH 121", "MATH 156", "MATH 175",
 					   				 "MATH 176", "MATH 185", "MATH 186", "MATH 214", "MATH 215", "MATH 216", "MATH 217", "MATH 255", "MATH 256",
 					   				 "MATH 285", "MATH 286", "MATH 295", "MATH 296", "MATH 417", "MATH 419"],
@@ -40,7 +40,7 @@ var course_Prereqs = { "ENGR 101" : ["Intro Comp&Prog", "|", "|", "ENGR 151", "E
 					   "EECS 388" : ["Introduction to Computer Security", "EECS 281"],
 					   "EECS 427" : ["VLSI Design I", "EECS 270", "EECS 312", "EECS 320"],
 					   "EECS 441" : ["Mobile App Development for Entrepreneurs", "EECS 281", "EECS 370", "|", "EECS 373", "EECS 381", "EECS 388",
-					   				 "EECS 427", "EECS 442", "EECS 445", "EECS 467", "EECS 470", "EECS 475", "EECS 477", "EECS 478", "EECS 482", 
+					   				 "EECS 427", "EECS 442", "EECS 445", "EECS 467", "EECS 470", "EECS 475", "EECS 477", "EECS 478", "EECS 482",
 					   				 "EECS 483", "EECS 484", "EECS 485", "EECS 486", "EECS 487", "EECS 489", "EECS 490", "EECS 492", "EECS 493"],
 					   "EECS 442" : ["Computer Vision", "EECS 281"],
 					   "EECS 445" : ["Introduction to Machine Learning", "EECS 281"],
@@ -92,7 +92,7 @@ var descriptions = {"EECS183" : "Elementary Programming Concepts --- Fundamental
 					"EECS489": "Protocols and architectures of computer networks. Topics include client-server computing, socket programming, naming and addressing, media access protocols, routing and transport protocols, flow and congestion control, and other application-specific protocols. Emphasis is placed on understanding protocol design principles. Programming problems to explore design choices and actual implementation issues assigned",
 					"EECS492": "Fundamental concepts of AI, organized around the task of building computational agents. Core topics include search, logic, representation and reasoning, automated planning, decision making under uncertainty, and machine learning.",
 					"EECS493": "Concepts and techniques for designing computer system user interfaces to be easy to learn and use, with an introduction to their implementation. Task analysis, design of functionality, display and interaction design, and usability evaluation. Interface programming using an object-oriented application framework. Fluency in a standard object-oriented programming language is assumed.",
-					
+
 					"EECS494": "Concepts and methods for the design and development of computer games. Topics include: history of games, 2D graphics and animation, sprites, 3D animation, binary space partition trees, software engineering, game design, interactive fiction, user interfaces, artificial intelligence, game SDK’s, networking, multi-player games, game development environments, commercialization of software."
 				};
 
@@ -101,6 +101,7 @@ router.post("/createsuggestions",function(req,res){
 
 	//Store Courses user has taken (For comparison)
 	var takenKeys = Object.keys(req.body);
+	console.log("THESE are the taken keys " + takenKeys);
 	Taken = []
 	console.log("Ascending = " + req.body.ascending);
 	console.log("descending =" + req.body.descending);
@@ -108,10 +109,11 @@ router.post("/createsuggestions",function(req,res){
 		var took_course = req.body[takenKeys[i]].toUpperCase();
 		Taken.push(took_course);
 	}
-	
+	console.log(Taken);
+
 	//Compare taken courses to prereqs and return recommendations
 	db.collection("courses").find().toArray(function(err,result){
-	
+
 
 	var recommendations =[]
 	var key = result;
@@ -130,7 +132,7 @@ router.post("/createsuggestions",function(req,res){
 		}
 	}
 	Taken = Taken.concat(course_additions);
-	
+
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
 		var j = 1;
@@ -179,19 +181,19 @@ router.post("/createsuggestions",function(req,res){
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
 			}
-			
+
 			if(((key[i]["coursenumber"] < "270") || (key[i]["deparment"] + " " + key[i]["coursenumber"] == "EECS 280"))) {
 				continue;
 			}
 			if(key[i]["difficulty"]){
-			recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0],"difficulty": key[i]["difficulty"]});     
+			recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0],"difficulty": key[i]["difficulty"]});
 			//recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0] + " Difficulty: " + key[i]["difficulty"].toString());
 		}
 			else{
 				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
 			}
 		}
-		
+
 	}
 
 	if(req.body.ascending){
@@ -199,9 +201,9 @@ router.post("/createsuggestions",function(req,res){
 			return a["difficulty"] - b["difficulty"];
 		});
 }
-		
 
-	if(req.body.descending){ 
+
+	if(req.body.descending){
 
 		recommendations = recommendations.sort(function(a,b){
 			return b['difficulty'] - a["difficulty"];
@@ -215,7 +217,7 @@ router.post("/createsuggestions",function(req,res){
 	var json = JSON.stringify({courseReqs: recommendations});
 
 	res.end(json);
- 
+
 });
   });
 
@@ -225,7 +227,7 @@ router.get("/create",function(req,res,next){
 	res.render("create");
 });
 
-//Autocomplete function, seems to work I think we should use the html alternative   
+//Autocomplete function, seems to work I think we should use the html alternative
 
 
 
@@ -247,7 +249,7 @@ router.post("/logininformation",function(req,res){
 		console.log(req.body.email);
 		console.log(req.body.password);
 		var result = db.collection('users').find({_id: "ksandera@umich.edu"});
-  
+
   if(result){
   	console.log("Found user");
   }
