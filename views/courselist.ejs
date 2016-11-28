@@ -57,7 +57,9 @@ Instructor
 </td>
 <td>
 <% for(var a = 0; a < sectionInformation[i].Instructors.length; a++){ %>
-<%=sectionInformation[i].Instructors[a].name  %>
+<p id='professor<%=i%><%=a%>' class='<%=sectionInformation[i].SectionTypeDescr%>'><%=sectionInformation[i].Instructors[a].name  %></p>
+
+
 <%} %>
 </td>
 <%} %>

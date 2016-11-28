@@ -16,6 +16,25 @@ guide.get("/",function(req,res,next){
 
 });
 
+
+guide.get("/rmp",function(req,res,next){
+  var professorName = req.query.name;
+  console.log("Professor's name is " + professorName);
+
+  function professorCallback(professor){
+
+  //  console.log(professor);
+    res.writeHead(200, {"Content-Type": "application/json"});
+   var json = JSON.stringify({"rating": professor});
+   //console.log("JSON" + json);
+    //console.log(professor);
+   res.end(json);
+  }
+
+  rmp.get(professorName,professorCallback)
+
+});
+
 guide.post("/addcomment",function(req,res,next){
 
   var department = "";
@@ -47,6 +66,42 @@ guide.post("/addcomment",function(req,res,next){
   );
 
 });
+
+
+function sectionDescription(section){
+    var info = {};
+      info.SectionNumber = section.SectionNumber;
+      info.SectionTypeDescr = section.SectionTypeDescr;
+      info.CreditHours = section.CreditHours;
+      info.AvailableSeats = section.AvailableSeats;
+      info.Days = section.Meeting.Days;
+      info.Times = section.Meeting.Times;
+      info.Instructors = [];
+      if(typeof(section.ClassInstructors) != "undefined"){
+        if(typeof(section.ClassInstructors.length) == "undefined"){
+         var name = section.ClassInstructors.InstrName;
+         for(var j = 0; j < name.length; j++){
+          if(name.charAt(j) == ","){
+            name = name.substring(j + 1) + " " + name.substring(0,j);
+            break;
+          }
+         }
+         info.Instructors.push({"name": name, "rating": ""});
+        }
+        else{
+          for(var j = 0; j < section.ClassInstructors.length; j++){
+             var name = section.ClassInstructors[j].InstrName;
+         for(var j = 0; j < name.length; j++){
+          if(name.charAt(j) == ","){
+            name = name.substring(j + 1) + " " + name.substring(0,j);
+            break;
+          }
+         }
+        info.Instructors.push({"name": name, "rating": ""});          }
+        }
+      }
+      return info;
+}
 guide.get("/search",function(req,initialRes,next){
 
  var departmentCode = "";
@@ -97,11 +152,18 @@ guide.get("/search",function(req,initialRes,next){
 
 }, function(err, sectionRes) {
     var sectionResponse = JSON.parse(sectionRes.body);
+    console.log("The SECTION RESPONSE");
     console.log(sectionResponse);
     var sections = sectionResponse.getSOCSectionsResponse.Section;
     var sectionInformation = [];
-    console.log("SECTIONs");
+  //  console.log("SECTIONs");
+    console.log("SECTOIN UNDEFINED" + sections.length);
+    if(typeof(sections.length) == "undefined"){
+      sectionInformation.push(sectionDescription(sections));
+    }
     for(var i = 0; i < sections.length; i++){
+      sectionInformation.push(sectionDescription(sections[i]))
+      /*
       var info = {};
       info.SectionNumber = sections[i].SectionNumber;
       info.SectionTypeDescr = sections[i].SectionTypeDescr;
@@ -136,14 +198,15 @@ guide.get("/search",function(req,initialRes,next){
       sectionInformation.push(info);
 
     //  console.log(info);
+    */
 
    }
     description["sectionInformation"] = sectionInformation;
-    console.log(JSON.stringify(sectionInformation[0].Instructors[0]));
+
     db.collection("courses").find({"department": departmentCode, "coursenumber": courseNumber}).toArray(function(err, response){
       if(response.length > 0){
       description.comments = response[0].comments;
-      console.log(description.comments);
+    //  console.log(description.comments);
     }
    return initialRes.render("courselist",description);
     });
