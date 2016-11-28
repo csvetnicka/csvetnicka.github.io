@@ -1,11 +1,15 @@
 var express = require("express");
 var router = express.Router();
 
-router.get("/",function(req,res,next){
+router.get("/recommendation",function(req,res,next){
 console.log("Here");
 
 	res.render("index");
 });
+
+router.get("/",function(req,res,next){
+	res.render("landing");
+})
 
 var courses = {"EECS": ["183",   //List of courses in EECS department?
 "203","270","285","382", "280", "281", "370", "373","376",
