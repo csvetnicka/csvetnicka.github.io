@@ -60,6 +60,19 @@ var firstPadding = true
 			}
 
 	});
+	$("#ascending").click(function(){
+			reqs = reqs.sort(function(a,b){
+			return a["difficulty"] - b["difficulty"];
+		});
+		printSuggestions(reqs);
+	})
+
+	$("#descending").click(function(){
+			reqs = reqs.sort(function(a,b){
+			return b["difficulty"] - a["difficulty"];
+		});
+		printSuggestions(reqs);
+	})
 	$(".t").click(function(){
 		console.log(event.target.text);  //Change term dropdown to selected element
 		$("#term").html(event.target.text);
@@ -83,26 +96,8 @@ var firstPadding = true
 		getCourses($("#department-input").val());
 	});
 	var courseInformation = {};
-	$("#course-submit").click(function(){
 
-		var coursesTaken = {}
-		for(var i = 0; i < numAdded; i++){
-			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
-		}
-		coursesTaken["numCourses"] = numAdded;
-		coursesTaken["ascending"] = $("#ascending").is(":checked");
-	    coursesTaken["descending"] = $("#descending").is(":checked");
-
-
-		//console.log(coursesTaken);
-		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions",
-    contentType: 'application/json; charset=utf-8',
-    dataType: 'json',
-    async: true, data: JSON.stringify(coursesTaken),
-			success: function(data,status, xhr){
-				console.log("success");  //
-				reqs = data.courseReqs;
-				console.log(reqs);
+		function printSuggestions(reqs){
 				$("#rec-list").empty();
 				$("#rec-list").append("<h2 class='text-center'> Your Computer Science Course Recommendations </h2>");
 				for(var i = 0; i < reqs.length; i++){
@@ -119,6 +114,28 @@ var firstPadding = true
 
 
 				}
+			}
+	$("#course-submit").click(function(){
+
+		var coursesTaken = {}
+		for(var i = 0; i < numAdded; i++){
+			coursesTaken[course + i.toString()] = $("#" + course + i.toString()).val();
+		}
+		coursesTaken["numCourses"] = numAdded;
+	//	coursesTaken["ascending"] = $("#ascending").is(":checked");
+	  //  coursesTaken["descending"] = $("#descending").is(":checked");
+	  	reqs = [];
+
+		//console.log(coursesTaken);
+		$.ajax({type:"POST", url: "http://localhost:3000/createsuggestions",
+    contentType: 'application/json; charset=utf-8',
+    dataType: 'json',
+    async: true, data: JSON.stringify(coursesTaken),
+			success: function(data,status, xhr){
+				console.log("success");  //
+				reqs = data.courseReqs;
+				console.log(reqs);
+				printSuggestions(reqs);
 
 			}});
 

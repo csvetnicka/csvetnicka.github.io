@@ -195,7 +195,7 @@ router.post("/createsuggestions",function(req,res){
 		}
 
 	}
-
+/*
 	if(req.body.ascending){
 		recommendations = recommendations.sort(function(a,b){
 			return a["difficulty"] - b["difficulty"];
@@ -210,7 +210,7 @@ router.post("/createsuggestions",function(req,res){
 		});
 }
 
-
+*/
 
 	console.log(recommendations);
 	res.writeHead(200, {"Content-Type": "application/json"});
