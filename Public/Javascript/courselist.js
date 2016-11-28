@@ -1,6 +1,12 @@
+var ratings = 0;
+var professorsRatings = [];
 
 function professorRating(name, id){
 	console.log(name);
+	if(typeof(professorsRatings[name]) != "undefined"){
+		return;
+	}
+	professorsRatings[name] = 1;
 	var nameBreak = [];
 	var prev = 0
 	for(var i = 0; i < name.length; i++){
@@ -18,7 +24,26 @@ function professorRating(name, id){
 type: "get", success: function(data,status,xhr){
 		console.log(id);
 		console.log(data);
-		$("#" + id).append("<p>Rate My Professors("+ data.rating.quality + ")</p>");
+		//$("#" + id).append("<p>Rate My Professors("+ data.rating.quality + ")</p>");
+		$("#rmp").append("<table class='pure-table pure-table-bordered'><thead> <tr> <th>" + name + " Rate My Professor </th> </tr> </thead> <tbody id='rating" + ratings.toString() + "'>");
+		var currentRating = ratings;
+		ratings += 1;
+		var c = $("#course-name").text();
+		console.log("Course is" + c);
+
+		for(var j = 0; j < c.length; j++){
+			if(c.charAt(j) == ' '){
+				c = c.substring(0,j) + c.substring(j + 1,j + 4);
+				break;
+			}
+		}
+		for(var i = 0; i < data.rating.courses.length; i++){
+			if(data.rating.courses[i] == c){
+				$("#rating" + currentRating.toString()).append("<tr> <td>" + data.rating.comments[i] + "</td>  </tr>");
+			}
+		}
+		$("#rmp").append("</tbody> </table");
+
 		return;
 }})
 }
