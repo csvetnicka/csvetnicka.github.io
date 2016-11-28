@@ -138,6 +138,9 @@ guide.get("/search",function(req,initialRes,next){
           break;
         }
     }
+    if(title === ""){
+      description["title"] = "";
+    }
     description["department"] = departmentCode;
     description["courseNumber"] = courseNumber;
 
