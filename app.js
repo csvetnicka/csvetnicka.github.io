@@ -1,4 +1,4 @@
-/* app.js is the entry point to the application and contians middleware common to 
+/* app.js is the entry point to the application and contians middleware common to
 all routes */
 var express = require("express");
 var morgan = require("morgan");
@@ -16,7 +16,7 @@ var app = express();
 var index = require("./routes/index");
 var courseGuide = require("./routes/courseguide");
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true })); 
+app.use(bodyParser.urlencoded({ extended: true }));
 //Set up view engine
 app.set("views",path.resolve(__dirname,"views"));
 app.set("view engine", "ejs");
@@ -35,14 +35,14 @@ app.use(express.static(publicPath)); //Every file available in the Public folder
 const MongoClient = require('mongodb').MongoClient
 
 var token = undefined;
-
+function getToken(){
 request({
   url: 'https://api-km.it.umich.edu/token',
-  headers: {    
+  headers: {
     "Authorization": "Basic MlBXNFFEM2dHT2d5RElDQm0zZjIyZnZhcGFnYTpnNzJrUUlfZjRuMjRkWlBWMWNlZjZackFOODBh",
   "Content-Type": "application/x-www-form-urlencoded"},
   method: 'POST',
- 
+
   form: {
   'grant_type': 'client_credentials',
     'scope': 'PRODUCTION',
@@ -59,7 +59,11 @@ request({
 
 
 });
- 
+}
+getToken();
+exports.getToken = getToken;
+var requests = 0;
+
 var callback = function(professor) {
   if (professor === null) {
     console.log("No professor found.");
@@ -67,13 +71,13 @@ var callback = function(professor) {
   }
   console.log(professor);
 };
- 
-rmp.get("Michael Smith", callback);
+
+rmp.get("Elliot Soloway", callback);
 MongoClient.connect('mongodb://ksandera:number18@ds145667.mlab.com:45667/myscheduleplus', (err, database) => {
   	  if (err) return console.log(err)
    db = database
 	//console.log(db);
- 
+
   app.listen(3000, () => {
     console.log('listening on 3000')
   });

@@ -1,0 +1,53 @@
+<% include header %>
+
+		<div class="row">
+			<div class="col-md-4">
+			</div>
+			<div class="col-md-4">
+				<h2> Account Creation </h2>
+			</div>
+			<div class="col-md-4">
+			</div>
+
+		</div>
+	</div>
+	<div class="row">
+			<div class="col-md-3">
+			</div>
+			<div class="col-md-6">
+				<form action="http://localhost:3000" method="get">
+					<div class="form-group">
+						<label for="firstname"> First Name</label>
+						<input type="text" class="form-control" id="user-firstname" aria-describedby="first name input">
+
+					</div>
+					<div class="form-group">
+						<label for="lastname"> Last Name</label>
+						<input type="text" class="form-control" id="user-lastname" aria-describedby="last name input">
+
+					</div>
+					<div class="form-group">
+						<label for="emailaddress"> Email Address </label>
+						<input type="email" class="form-control" id="user-email" aria-describedby="email input">
+
+					</div>
+					<div class="form-group">
+						<label for="passwordinput"> Password</label>
+						<input type="password" class="form-control" id="user-password" aria-describedby="password input">
+
+					</div>
+					<div class="form-group">
+						<label for="passwordinputconfirm"> Confirm Password</label>
+						<input type="password" class="form-control" id="user-password-confirm" aria-describedby="password input">
+
+					</div>
+					 <button type="submit" id="account-submit" class="btn btn-success">Submit</button>
+
+				</form>
+				<div id="errors">
+				</div>
+			</div>
+			<div class="col-md-3">
+			</div>
+			
+	<% include footer %>

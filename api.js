@@ -1,5 +1,5 @@
 var request = require('request');
-
+const MongoClient = require('mongodb').MongoClient
 
 request({
   url: 'https://api-km.it.umich.edu/token',
@@ -17,23 +17,19 @@ request({
   var token = json.access_token;
   //console.log(err);
 // console.log("Access Token:", json.access_token);
-console.log("Bearer " + token);
-request({
-  url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/1220/Schools',
-  headers: {    
-    "Authorization": "Bearer " + token,
-  "Accept": "application/json"},
-  method: 'GET',
+//console.log("Bearer " + token);
+
+
+MongoClient.connect('mongodb://ksandera:number18@ds145667.mlab.com:45667/myscheduleplus', (err, database) => {
+      if (err) return console.log(err)
+   db = database
+  //console.log(db);
  
-}, function(err, res) {
-  var json = JSON.parse(res.body);
-  console.log(json.getSOCSchoolsResponse.School);
-  //console.log(err);
-// console.log("Access Token:", json.access_token);
+  //console.log("Is running");
 
 
+ 
 });
 
-
-});
+})
 

@@ -111,8 +111,8 @@ var firstPadding = true
 					var coursename = reqs[i]["course"].substring(0,4) + "-" + reqs[i]["course"].substring(5,8);
 					//console.log(coursename);
 					$("#rec-list").append("<div class='row'> ");
-					$("#rec-list").append("<h5 id='" + newId + "'>" + reqs[i]["course"] +  " Difficulty: " + reqs[i]["difficulty"].toString() + "</h5> <div id='div" + coursename + "'>");
-					$("#rec-list").append("<button class='course-info btn btn-info' type='button' id='" + coursename + "' >Info</button> ");
+					$("#rec-list").append("<a href='http://localhost:3000/courseguide/search/?term=Winter+2017&department=Elec+Engin+%26+Computer+Sci&course=EECS+" + encodeURIComponent(reqs[i]["course"].substring(5,8)) + "'><h5 id='" + newId + "'>" + reqs[i]["course"] +  " Difficulty: " + reqs[i]["difficulty"].toString() + "</h5> <div id='div" + coursename + "'>");
+
 					$("#rec-list").append("</div> </div>");
 					courseInformation[coursename] = false;
 

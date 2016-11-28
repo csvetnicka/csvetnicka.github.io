@@ -17,7 +17,7 @@ function professorRating(name, id){
 	}
 	nameBreak.push(name.substring(prev,name.length));
 	if(nameBreak.length > 2){
-		name = nameBreak[0] + " " + nameBreak[2];
+		name = nameBreak[0] + " " + nameBreak[nameBreak.length - 1];
 	}
 	console.log("The professor's name is " + name);
 	$.ajax({url: "http://localhost:3000/courseguide/rmp?name=" + encodeURIComponent(name),
@@ -25,7 +25,7 @@ type: "get", success: function(data,status,xhr){
 		console.log(id);
 		console.log(data);
 		//$("#" + id).append("<p>Rate My Professors("+ data.rating.quality + ")</p>");
-		$("#rmp").append("<table class='pure-table pure-table-bordered'><thead> <tr> <th>" + name + " Rate My Professor </th> </tr> </thead> <tbody id='rating" + ratings.toString() + "'>");
+		$("#rmp").append("<table class='pure-table pure-table-bordered'><thead> <tr> <th>" + name + " Quality(" + data.rating.quality + ") </th> </tr> </thead> <tbody id='rating" + ratings.toString() + "'>");
 		var currentRating = ratings;
 		ratings += 1;
 		var c = $("#course-name").text();
