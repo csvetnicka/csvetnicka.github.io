@@ -70,12 +70,14 @@ guide.post("/addcomment",function(req,res,next){
 
 function sectionDescription(section){
     var info = {};
+
       info.SectionNumber = section.SectionNumber;
       info.SectionTypeDescr = section.SectionTypeDescr;
       info.CreditHours = section.CreditHours;
       info.AvailableSeats = section.AvailableSeats;
-      info.Days = section.Meeting.Days;
-      info.Times = section.Meeting.Times;
+      info.Days = [];
+      info.Times = [];
+
       info.Instructors = [];
       if(typeof(section.ClassInstructors) != "undefined"){
         if(typeof(section.ClassInstructors.length) == "undefined"){
@@ -98,6 +100,16 @@ function sectionDescription(section){
           }
          }
         info.Instructors.push({"name": name, "rating": ""});          }
+        }
+      }
+      if(typeof(section.Meeting.length) == "undefined"){
+        info.Times.push(section.Meeting.Days);
+        info.Days.push(section.Meeting.Times);
+      }
+      else{
+        for(var i = 0; i < section.Meeting.length; i++){
+          info.Days.push(section.Meeting[i].Days);
+          info.Times.push(section.Meeting[i].Times);
         }
       }
       return info;

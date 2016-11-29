@@ -51,15 +51,18 @@ Instructor
 </td>
 <td>
 
-<%= sectionInformation[i].AvailableSeats %>
+<%= sectionInformation[i].AvailableSeats %>(
 <% if(sectionInformation[i].AvailableSeats){%>
 <span style="color: green"> Open </span>
 <%}else{%>
 <span style="color: red"> Closed </span>
 <%}%>
+)
 </td>
 <td>
-<%= sectionInformation[i].Days + " " + sectionInformation[i].Times %>
+<% for(var k = 0; k < sectionInformation[i].Days.length; k++){%>
+<p><%= sectionInformation[i].Days[k] + " " + sectionInformation[i].Times[k] %></p>
+<%}%>
 </td>
 <td>
 <% for(var a = 0; a < sectionInformation[i].Instructors.length; a++){ %>
