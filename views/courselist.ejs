@@ -19,8 +19,8 @@
 <div class="col-md-8">
 <h4 style="text-align: center; vertical-align: middle;"> Section Information </h4>
 <% if(sectionInformation.length  > 0){ %>
-<table class="pure-table pure-table-bordered">
-<thead>
+<table class="table table-inverse">
+<thead class="thead-inverse">
 <tr>
 <th>
 Section
@@ -50,7 +50,13 @@ Instructor
 <%= sectionInformation[i].CreditHours %>
 </td>
 <td>
+
 <%= sectionInformation[i].AvailableSeats %>
+<% if(sectionInformation[i].AvailableSeats){%>
+<span style="color: green"> Open </span>
+<%}else{%>
+<span style="color: red"> Closed </span>
+<%}%>
 </td>
 <td>
 <%= sectionInformation[i].Days + " " + sectionInformation[i].Times %>
@@ -94,7 +100,7 @@ Enter your Course Review!
 </div>
 <button id="add-comment" type="submit" class="btn btn-primary">Add Comment </button>
 </form>
-<table class="table table-striped">
+<table class="table table-inverse>
 <thead>
 <tr>
 <th> Comments </th>
