@@ -116,7 +116,7 @@ router.post("/createsuggestions",function(req,res){
 	console.log(Taken);
 
 	//Compare taken courses to prereqs and return recommendations
-	db.collection("courses").find({$and: [{"department": "EECS"}, {"coursenumber": {$ne: "488"}}]}).toArray(function(err,result){
+	db.collection("courses").find({$or: [{"department": "EECS"}, {"department": "ENGR"}]}).toArray(function(err,result){
 
 
 	var recommendations =[]
@@ -136,6 +136,7 @@ router.post("/createsuggestions",function(req,res){
 		}
 	}
 	Taken = Taken.concat(course_additions);
+
 
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
@@ -184,19 +185,17 @@ router.post("/createsuggestions",function(req,res){
 				}
 				j++;
 			}
+
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
 			}
 
-			if(((key[i]["coursenumber"] < "270") || (key[i]["deparment"] + " " + key[i]["coursenumber"] == "EECS 280"))) {
-				continue;
-			}
 			if(key[i]["difficulty"]){
 			recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0],"difficulty": key[i]["difficulty"]});
 			//recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0] + " Difficulty: " + key[i]["difficulty"].toString());
 		}
 			else{
-				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
+				recommendations.push({"course": key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]});
 			}
 		}
 	}
