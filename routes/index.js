@@ -116,13 +116,13 @@ router.post("/createsuggestions",function(req,res){
 	console.log(Taken);
 
 	//Compare taken courses to prereqs and return recommendations
-	db.collection("courses").find().toArray(function(err,result){
+	db.collection("courses").find({$and: [{"department": "EECS"}, {"coursenumber": {$ne: "488"}}]}).toArray(function(err,result){
 
 
 	var recommendations =[]
 	var key = result;
 	var size = result.length;
-
+	console.log("The result from the database is " + key);
 	var course_additions = []
 	for (var i = 0; i < Taken.length; i++) {
 		for (var j = 0; j < size; j++) {
@@ -139,6 +139,8 @@ router.post("/createsuggestions",function(req,res){
 
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
+		if(check){
+		console.log("The check is " + check);
 		var j = 1;
 
 		if (Taken.indexOf(key[i]["department"] + " " +  key[i]["coursenumber"]) == -1) { //User has not taken this course already
@@ -197,6 +199,7 @@ router.post("/createsuggestions",function(req,res){
 				recommendations.push(key[i]["department"] + " " + key[i]["coursenumber"] + ": " + key[i]["prerequisites"][0]);
 			}
 		}
+	}
 
 	}
 /*
