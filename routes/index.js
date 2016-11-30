@@ -124,18 +124,22 @@ router.post("/createsuggestions",function(req,res){
 	var size = result.length;
 	console.log("The result from the database is " + key);
 	var course_additions = []
-	for (var i = 0; i < Taken.length; i++) {
-		for (var j = 0; j < size; j++) {
-			if (Taken[i].substring(5) == key[j]["coursenumber"]) {
-				for (var course = 1; course < key[j]["prerequisites"].length; course++) {
-					if (key[j]["prerequisites"][course] != "|" && key[j]["prerequisites"][course] != "EECS 270") {
-						course_additions.push(key[j]["prerequisites"][course].toUpperCase());
+	var times_inherited = 0; //To add prereqs of inherited courses
+	while (times_inherited < 3) {
+		for (var i = 0; i < Taken.length; i++) {
+			for (var j = 0; j < size; j++) {
+				if (Taken[i].substring(5) == key[j]["coursenumber"]) {
+					for (var course = 1; course < key[j]["prerequisites"].length; course++) {
+						if (key[j]["prerequisites"][course] != "|" && key[j]["prerequisites"][course]) {
+							course_additions.push(key[j]["prerequisites"][course].toUpperCase());
+						}
 					}
 				}
 			}
 		}
+		Taken = Taken.concat(course_additions);
+		times_inherited++; 
 	}
-	Taken = Taken.concat(course_additions);
 
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
@@ -187,10 +191,6 @@ router.post("/createsuggestions",function(req,res){
 
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
-			}
-			if (((Taken.indexOf("EECS 280") != -1) || (Taken.indexOf("EECS 281") != -1)) 
-				&& ((key[i]["coursenumber"] == "101") || (key[i]["coursenumber"] == "183"))) {
-				continue;
 			}
 
 			if(key[i]["difficulty"]){
