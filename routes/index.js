@@ -137,7 +137,6 @@ router.post("/createsuggestions",function(req,res){
 	}
 	Taken = Taken.concat(course_additions);
 
-
 	for (var i = 0; i < size; i++) {
 		var check = key[i]["prerequisites"];
 		if(check){
@@ -188,6 +187,10 @@ router.post("/createsuggestions",function(req,res){
 
 			if (noCredit == true) {
 				continue; //User will not be given credit for this course
+			}
+			if (((Taken.indexOf("EECS 280") != -1) || (Taken.indexOf("EECS 281") != -1)) 
+				&& ((key[i]["coursenumber"] == "101") || (key[i]["coursenumber"] == "183"))) {
+				continue;
 			}
 
 			if(key[i]["difficulty"]){
