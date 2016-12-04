@@ -61,8 +61,9 @@ guide.post("/addcomment",function(req,res,next){
       else{
         db.collection("courses").update({"department": department,"coursenumber": courseNum},{"$push": {"comments": req.body.comment}});
         }
-        res.sendStatus(200);
+         res.sendStatus(200);
       }
+
   );
 
 });

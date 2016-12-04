@@ -61,7 +61,9 @@ $(document).ready(function(){
 		data: {"comment": comment, "time": Date.getTime,
 		course: $("#course-name").text()}, success:
 		function(data,status,xhr){
+
 			console.log("Completed");
+			console.log(comment);
 			if(status === "success"){
 				$("#comment-body").append("<tr> <td>" + comment + "</td> </tr>");
 			}

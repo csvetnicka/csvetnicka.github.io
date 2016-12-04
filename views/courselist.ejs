@@ -103,13 +103,15 @@ Enter your Course Review!
 </div>
 <button id="add-comment" type="submit" class="btn btn-primary">Add Comment </button>
 </form>
-<table class="table table-inverse>
+<table class="table table-inverse">
 <thead>
 <tr>
 <th> Comments </th>
 </tr>
 </thead>
-<tbody id="comment-body">
+
+
+<tbody id="comment-body" >
 <% if(typeof(comments) != "undefined") { %>
 <% for(var j = 0; j < comments.length; j++){ %>
 <tr> <td> <%=comments[j] %> </td> </tr>
