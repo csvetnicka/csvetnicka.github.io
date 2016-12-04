@@ -127,7 +127,9 @@ guide.get("/search",function(req,initialRes,next){
     break;
   }
  }
-
+if(departmentCode === "" || courseNumber === ""){
+  initialRes.sendStatus(404);
+}
 
   request({
   url:  "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/" + termCode + "/Schools/" + schoolCode + "/Subjects/" + departmentCode + "/CatalogNbrs/" + courseNumber,
@@ -174,7 +176,10 @@ guide.get("/search",function(req,initialRes,next){
     var sectionInformation = [];
   //  console.log("SECTIONs");
     //console.log("SECTOIN UNDEFINED" + sections.length);
-    if(typeof(sections.length) == "undefined"){
+    if(typeof(sections) === "undefined"){
+      return initialRes.sendStatus(404);
+    }
+    if(typeof(sections.length) === "undefined"){
       sectionInformation.push(sectionDescription(sections));
     }
     for(var i = 0; i < sections.length; i++){
@@ -279,10 +284,11 @@ guide.get("/getdepartments",function(req,res,next){
 guide.get("/getcourses",function(req,res,next){
     var schoolCode = schoolCodes[req.query.school];
     var department = req.query.department;
+    var termCode = terms[req.query.term];
     console.log(schoolCode);
     console.log("This is " + department);
      request({
-  url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/' + schoolCode +  "/Subjects",
+  url:  'https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/' + termCode + '/Schools/' + schoolCode +  "/Subjects",
   headers: {
     "Authorization": "Bearer " + config.token,
   "Accept": "application/json"},
@@ -304,7 +310,7 @@ guide.get("/getcourses",function(req,res,next){
     console.log("Deparmetn code = " + department);
       request({
 
-  url: "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/2120/Schools/" + schoolCode + "/Subjects/" + departmentCode +"/CatalogNbrs",
+  url: "https://api-gw.it.umich.edu/Curriculum/SOC/v1/Terms/" + termCode + "/Schools/" + schoolCode + "/Subjects/" + departmentCode +"/CatalogNbrs",
   headers: {
     "Authorization": "Bearer " + config.token,
   "Accept": "application/json"},

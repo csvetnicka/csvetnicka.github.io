@@ -1,5 +1,6 @@
 
 
+
 function getDepartments(school){
 	var encodedSchool = encodeURI(school);
 	console.log(school + " IS");
@@ -19,8 +20,9 @@ method: "GET", success: function(data,status,xhr){
 function getCourses(department){
 	var encodedDepartment = encodeURIComponent(department);
 	var encodedSchool = encodeURIComponent($("#school-input").val());
-
-	$.ajax({url: "http:///localhost:3000/courseguide/getcourses?department=" + encodedDepartment + "&school=" + encodedSchool,
+	var encodedTerm = encodeURIComponent($("#term-input").val());
+	console.log($("#term-input").val());
+	$.ajax({url: "http:///localhost:3000/courseguide/getcourses?department=" + encodedDepartment + "&school=" + encodedSchool + "&term=" + encodedTerm,
 		method: "GET",success: function(data,status,xhr){
 			var courses = data.courses;
 			if(courses){
